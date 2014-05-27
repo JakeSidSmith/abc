@@ -1,0 +1,27 @@
+<svg ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}">
+		<text ng-show="settings.title.show === true" ng-attr-x="{{settings.width / 2 || 0}}" y="12" fill="black" text-anchor="middle" font-size="12" ng-bind="settings.title.content"></text>
+		<line stroke="black" ng-attr-x1="{{settings.margin}}" ng-attr-y1="{{settings.margin}}" ng-attr-x2="{{settings.margin}}" ng-attr-y2="{{settings.height - settings.margin}}" />
+		<line stroke="black" ng-attr-x1="{{settings.margin}}" ng-attr-y1="{{settings.height - settings.margin}}" ng-attr-x2="{{settings.width - settings.margin}}" ng-attr-y2="{{settings.height - settings.margin}}" />
+		<!-- Line -->
+		<g ng-show="settings.type === 'line'" ng-attr-transform="{{abc.chartOffset()}}">
+				<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getPoints($index)}}" stroke-width="2" fill="none" />
+		</g>
+		<!-- Area -->
+		<g ng-show="settings.type === 'area'" ng-attr-transform="{{abc.chartOffset()}}">
+				<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getAreaPoints($index)}}" fill-opacity="0.3" stroke-width="2" />
+		</g>
+		<!-- Spline -->
+		<g ng-show="settings.type === 'spline'" ng-attr-transform="{{abc.chartOffset()}}">
+				<path ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-d="{{abc.getSplinePoints($index)}}" stroke-width="2" fill="none" />
+		</g>
+		<!-- Bar -->
+		<g ng-show="settings.type === 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="{{abc.chartOffset()}}" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
+				<rect ng-repeat="point in points" ng-attr-x="{{$index * (settings.width-settings.margin*2) / (points.length) + $parent.$index * (settings.width-settings.margin*2) / (points.length) / settings.data.length}}" ng-attr-y="{{(settings.height - settings.margin*2) - point.value}}" ng-attr-width="{{(settings.width-settings.margin*2) / (points.length) / settings.data.length}}" ng-attr-height="{{point.value}}" />
+		</g>
+		<!-- Bar Top -->
+		<line ng-show="settings.type === 'bar' && settings.hovering.y >= 0" ng-attr-x1="{{abc.hoveringBar().x1}}" ng-attr-y1="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" ng-attr-x2="{{abc.hoveringBar().x2}}" ng-attr-y2="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" stroke-width="2" stroke="black" />
+		<!-- Point -->
+		<circle ng-hide="settings.type === 'bar' || settings.hovering.y < 0" ng-attr-cx="{{abc.hoveringCircle().x}}" ng-attr-cy="{{abc.hoveringCircle().y}}" r="4" fill="black" stroke="none" />
+		<!-- Level Line -->
+		<line ng-attr-x1="{{settings.margin}}" ng-attr-y1="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" ng-attr-x2="{{settings.width - settings.margin}}" ng-attr-y2="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
+</svg>
