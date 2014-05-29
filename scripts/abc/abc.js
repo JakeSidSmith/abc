@@ -11,7 +11,7 @@ app.directive('abc', [function () {
 			input: '=data'
 		},
 		templateUrl: '/views/abc.html',
-		controller: function ($scope, $element) {
+		controller: function ($scope, $element, $window) {
 			// Default hovering indices
 			$scope.input.hovering = $scope.input.hovering || {};
 			$scope.input.hovering.x = $scope.input.hovering.x || -1;
@@ -21,6 +21,7 @@ app.directive('abc', [function () {
 			// Default title
 			$scope.input.title = $scope.input.title || {};
 			$scope.input.title.content = $scope.input.title.content || 'A Chart';
+			$scope.input.title.size = $scope.input.title.size || 12;
 			$scope.input.title.show = $scope.input.title.show === false ? false : true;
 			// Default resize settings
 			$scope.input.resize = $scope.input.resize || {};
@@ -40,12 +41,46 @@ app.directive('abc', [function () {
 			$scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
 			$scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
 
-			$scope.input.width = $element.width();
-			//$scope.input.height = $element.height();
+
+			$scope.getElementDimensions = function () {
+		    return { 'h': $element.height(), 'w': $element.width() };
+		  };
+
+		  $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
+				if (oldValue !== newValue) {
+			    $scope.input.width = $element.width();
+					$scope.input.height = $element.height();
+				}
+		  }, true);
+
+			if ($scope.input.resize.width || $scope.input.resize.height){
+				angular.element($window).bind('resize', function () {
+					$scope.$apply();
+				});
+			}
 
 			$scope.settings = $scope.input;
 
 			$scope.abc = {
+				setHovering: function (indexP, index) {
+					$scope.settings.hovering.y = indexP !== undefined ? indexP : -1;
+					$scope.settings.hovering.x = index !== undefined ? index : -1;
+				},
+				axisOffset: function () {
+					return {
+						x: $scope.settings.margin,
+						y: $scope.settings.margin + $scope.settings.title.size,
+						width: $scope.settings.width - $scope.settings.margin,
+						height: $scope.settings.height - $scope.settings.margin
+					};
+				},
+				highLow: function () {
+					angular.forEach($scope.settings.data, function (row) {
+						angular.forEach(row, function (item) {
+							console.log(item);
+						});
+					});
+				},
 				chartOffset: function () {
 					return 'translate(' + $scope.settings.margin + ',' + $scope.settings.margin + ')';
 				},
@@ -85,13 +120,14 @@ app.directive('abc', [function () {
 					return '';
 				},
 				hoveringCircle: function () {
-					if ($scope.settings.hovering.y < 0) {
-						return {x: -100, y: -100};
+					if ($scope.settings.hovering.y >= 0 && $scope.settings.hovering.x >= 0) {
+						return {
+							x: 0,
+							//x: $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length-1) + $scope.settings.margin,
+							y: $scope.settings.height - $scope.settings.margin - $scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value
+						};
 					}
-					return {
-						x: $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length-1) + $scope.settings.margin,
-						y: $scope.settings.height - $scope.settings.margin - $scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value
-					};
+					return {x: -100, y: -100};
 				},
 				hoveringBar: function () {
 					if ($scope.settings.hovering.y >= 0) {
@@ -104,6 +140,9 @@ app.directive('abc', [function () {
 						x1: -100,
 						x2: -100
 					};
+				},
+				chartWidth: function () {
+					return $element[0].offsetWidth;
 				}
 			};
 
