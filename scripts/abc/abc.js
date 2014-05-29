@@ -12,17 +12,18 @@ app.directive('abc', [function () {
 		},
 		templateUrl: '/views/abc.html',
 		controller: function ($scope, $element, $window) {
+			// Default title
+			$scope.input.title = $scope.input.title || {};
+			$scope.input.title.content = $scope.input.title.content || 'A Chart';
+			$scope.input.title.size = $scope.input.title.size || 12;
+			$scope.input.title.show = $scope.input.title.show === false ? false : true;
+			$scope.input.title.align = $scope.input.title.align || 'center';
 			// Default hovering indices
 			$scope.input.hovering = $scope.input.hovering || {};
 			$scope.input.hovering.x = $scope.input.hovering.x || -1;
 			$scope.input.hovering.y = $scope.input.hovering.y || -1;
 			// Default chart type
 			$scope.input.type = $scope.input.type || 'line';
-			// Default title
-			$scope.input.title = $scope.input.title || {};
-			$scope.input.title.content = $scope.input.title.content || 'A Chart';
-			$scope.input.title.size = $scope.input.title.size || 12;
-			$scope.input.title.show = $scope.input.title.show === false ? false : true;
 			// Default resize settings
 			$scope.input.resize = $scope.input.resize || {};
 			$scope.input.resize.width = $scope.input.resize.width === false ? false : true;
@@ -40,7 +41,6 @@ app.directive('abc', [function () {
 			$scope.chartStyle = {};
 			$scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
 			$scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
-
 
 			$scope.getElementDimensions = function () {
 		    return { 'h': $element.height(), 'w': $element.width() };
@@ -74,12 +74,57 @@ app.directive('abc', [function () {
 						height: $scope.settings.height - $scope.settings.margin
 					};
 				},
+				titleOffset: function () {
+					var getX = function () {
+						if ($scope.settings.title.align === 'center') {
+							return $scope.settings.width / 2;
+						}
+						if ($scope.settings.title.align === 'left') {
+							return $scope.settings.margin;
+						}
+						if ($scope.settings.title.align === 'right') {
+						  return $scope.settings.width - $scope.settings.margin;
+						}
+					};
+					return {
+						x: getX(),
+						y: $scope.settings.title.size
+					};
+				},
+				titleAnchor: function () {
+					if ($scope.settings.title.align === 'center') {
+						return 'middle';
+					}
+					return $scope.settings.title.align;
+				},
 				highLow: function () {
+					var lowestSet = false;
+					var highestSet = false;
+					var lowest = 0;
+					var highest = 0;
 					angular.forEach($scope.settings.data, function (row) {
 						angular.forEach(row, function (item) {
-							console.log(item);
+							if (item < lowest || lowestSet === false) {
+								lowest = item;
+								lowestSet = true;
+							}
+							if (item > highest || highestSet === false) {
+								highest = item;
+								highestSet = true;
+							}
 						});
 					});
+					return {
+						lowest: lowest,
+						highest: highest
+					};
+				},
+				highLowDif: function () {
+					var highLow = this.highLow();
+					return this.difference(highLow.lowest, highLow.highest);
+				},
+				difference: function (value1, value2) {
+					return Math.abs(value1 - value2);
 				},
 				chartOffset: function () {
 					return 'translate(' + $scope.settings.margin + ',' + $scope.settings.margin + ')';
@@ -108,7 +153,8 @@ app.directive('abc', [function () {
 						}
 						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - item.value);
 						if (itemIndex < $scope.settings.data[index].length-1) {
-							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * 0.5) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - item.value);
+							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * 0.5) +
+									' ' + (($scope.settings.height - $scope.settings.margin*2 - item.value) + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.data[index][itemIndex + 1].value)) * 0.5;
 						}
 						return final;
 					}).join(' ');
@@ -122,8 +168,7 @@ app.directive('abc', [function () {
 				hoveringCircle: function () {
 					if ($scope.settings.hovering.y >= 0 && $scope.settings.hovering.x >= 0) {
 						return {
-							x: 0,
-							//x: $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length-1) + $scope.settings.margin,
+							x: $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length-1) + $scope.settings.margin,
 							y: $scope.settings.height - $scope.settings.margin - $scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value
 						};
 					}
