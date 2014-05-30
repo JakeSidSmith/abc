@@ -1,5 +1,4 @@
 <svg ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" >
-		<!--circle cx="5%" ng-attr-cy="{{settings.margin}}" r="10" fill="orange" /-->
 		<text ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
 		<line stroke="black" ng-attr-x1="{{abc.axisOffset().x}}" ng-attr-y1="{{abc.axisOffset().y}}" ng-attr-x2="{{abc.axisOffset().x}}" ng-attr-y2="{{abc.axisOffset().height}}" />
 		<line stroke="black" ng-attr-x1="{{abc.axisOffset().x}}" ng-attr-y1="{{abc.axisOffset().height}}" ng-attr-x2="{{abc.axisOffset().width}}" ng-attr-y2="{{abc.axisOffset().height}}" />
@@ -25,10 +24,14 @@
 		<!--
 		<circle ng-hide="settings.type === 'bar' || settings.hovering.y < 0" ng-attr-cx="{{abc.hoveringCircle().x}}" ng-attr-cy="{{abc.hoveringCircle().y}}" ng-attr-fill="{{settings.colors[settings.hovering.y % settings.colors.length]}}" r="5" stroke="none" />
 		-->
-		<!-- Level Line -->
-		<line ng-attr-x1="{{settings.margin}}" ng-attr-y1="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" ng-attr-x2="{{settings.width - settings.margin}}" ng-attr-y2="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
+		<!-- Horizontal Line -->
+		<line ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-x1="{{abc.axisOffset().x}}" ng-attr-y1="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" ng-attr-x2="{{settings.width - settings.margin}}" ng-attr-y2="{{settings.height - settings.margin - settings.data[settings.hovering.y][settings.hovering.x].value}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
+		<!-- Vertical Line -->
+		<line ng-show="settings.hovering.y < 0 && settings.hovering.x >= 0" ng-attr-x1="{{abc.verticalLineOffset()}}" ng-attr-y1="{{abc.axisOffset().y}}" ng-attr-x2="{{abc.verticalLineOffset()}}" ng-attr-y2="{{abc.axisOffset().height}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
+		<!-- Hovering Areas -->
+		<rect ng-show="settings.type !== 'bar'" ng-repeat="line in settings.data[0]" ng-attr-x="{{(settings.width - settings.margin*2) / (settings.data[0].length-1) * ($index-0.5) + settings.margin}}" ng-attr-y="{{abc.axisOffset().y}}" ng-attr-width="{{(settings.width - settings.margin*2) / (settings.data[0].length-1)}}" ng-attr-height="{{abc.axisOffset().height}}" ng-mouseover="abc.setHovering(undefined, $index)" ng-mouseout="abc.setHovering()" fill="rgba(0, 0, 0, 0)" />
 		<!-- Points -->
 		<g ng-show="settings.type !== 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="{{abc.chartOffset()}}" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
-				<circle ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-cx="{{$index * (settings.width-settings.margin*2) / (points.length - 1)}}" ng-attr-cy="{{(settings.height - settings.margin*2) - point.value}}" ng-attr-r="{{settings.hovering.y === $parent.$index && settings.hovering.x === $index ? 5 : 2.5}}" />
+				<circle ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-cx="{{$index * (settings.width-settings.margin*2) / (points.length - 1)}}" ng-attr-cy="{{(settings.height - settings.margin*2) - point.value}}" ng-attr-r="{{abc.pointRadius($parent.$index, $index)}}" />
 		</g>
 </svg>

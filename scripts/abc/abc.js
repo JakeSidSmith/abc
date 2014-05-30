@@ -91,6 +91,12 @@ app.directive('abc', [function () {
 						y: $scope.settings.title.size
 					};
 				},
+				verticalLineOffset: function () {
+					if ($scope.settings.hovering.y < 0 && $scope.settings.hovering.x >= 0) {
+						return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[0].length-1) + $scope.settings.margin;
+					}
+					return 0;
+				},
 				titleAnchor: function () {
 					if ($scope.settings.title.align === 'center') {
 						return 'middle';
@@ -128,6 +134,12 @@ app.directive('abc', [function () {
 				},
 				chartOffset: function () {
 					return 'translate(' + $scope.settings.margin + ',' + $scope.settings.margin + ')';
+				},
+				pointRadius: function (indexP, index)  {
+					if ($scope.settings.hovering.y < 0) {
+						return $scope.settings.hovering.x === index ? 5 : 2.5;
+					}
+					return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? 5 : 2.5;
 				},
 				getPoints: function (index) {
 					var points = $scope.settings.data[index].map(function (item, itemIndex) {
