@@ -29,7 +29,7 @@ app.directive('abc', [function () {
 			$scope.input.resize.width = $scope.input.resize.width === false ? false : true;
 			$scope.input.resize.height = $scope.input.resize.height === false ? false : true;
 			// Default margin
-			$scope.input.margin = $scope.input.margin || 20;
+			$scope.input.margin = $scope.input.margin || 10;
 			// Default sizes
 			$scope.input.width = $scope.input.width || 0;
 			$scope.input.height = $scope.input.height || 0;
@@ -65,6 +65,14 @@ app.directive('abc', [function () {
 				setHovering: function (indexP, index) {
 					$scope.settings.hovering.y = indexP !== undefined ? indexP : -1;
 					$scope.settings.hovering.x = index !== undefined ? index : -1;
+				},
+				chartOffset: function () {
+					return {
+						x: $scope.settings.margin,
+						y: $scope.settings.margin + $scope.settings.title.size,
+						width: $scope.settings.width - $scope.settings.margin*2,
+						height: $scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size
+					};
 				},
 				axisOffset: function () {
 					return {
@@ -132,9 +140,6 @@ app.directive('abc', [function () {
 				difference: function (value1, value2) {
 					return Math.abs(value1 - value2);
 				},
-				chartOffset: function () {
-					return 'translate(' + $scope.settings.margin + ',' + $scope.settings.margin + ')';
-				},
 				pointRadius: function (indexP, index)  {
 					if ($scope.settings.hovering.y < 0) {
 						return $scope.settings.hovering.x === index ? 5 : 2.5;
@@ -143,17 +148,19 @@ app.directive('abc', [function () {
 				},
 				getPoints: function (index) {
 					var points = $scope.settings.data[index].map(function (item, itemIndex) {
-						return (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ',' + ($scope.settings.height - $scope.settings.margin*2 - item.value);
+						return (($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) +
+							',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value);
 					}).join(',');
 
 					return points;
 				},
 				getAreaPoints: function (index) {
 					var points = $scope.settings.data[index].map(function (item, itemIndex) {
-						return (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ',' + ($scope.settings.height - $scope.settings.margin*2 - item.value);
+						return (($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) +
+						',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value);
 					});
-					points.unshift('0,' + ($scope.settings.height - $scope.settings.margin*2));
-					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2));
+					points.unshift('0,' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size));
+					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size));
 					return points.join(',');
 				},
 				getSplinePoints: function (index) {
@@ -163,7 +170,7 @@ app.directive('abc', [function () {
 						if (itemIndex !== 0) {
 							first = '';
 						}
-						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - item.value);
+						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value);
 						if (itemIndex < $scope.settings.data[index].length-1) {
 							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * 0.5) +
 									' ' + (($scope.settings.height - $scope.settings.margin*2 - item.value) + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.data[index][itemIndex + 1].value)) * 0.5;
