@@ -217,7 +217,7 @@ app.directive('abc', [function () {
 						',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value  - $scope.abc.axisLineSize - $scope.settings.headers.size);
 					});
 					points.unshift('0,' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size  - $scope.abc.axisLineSize - $scope.settings.headers.size));
-					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size  - $scope.abc.axisLineSize - $scope.settings.headers.size));
+					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.abc.axisLineSize - $scope.settings.headers.size));
 					return points.join(',');
 				},
 				getSplinePoints: function (index) {
