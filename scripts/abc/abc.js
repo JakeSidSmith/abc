@@ -2,6 +2,43 @@
 
 var app = angular.module('abcApp');
 
+app.service('ABC', [function () {
+
+	var service = {};
+
+	service.transformData = function (data) {
+		var newData = [];
+
+		for (var r = 1; r < data.length; r += 1) {
+			newData.push([]);
+			for (var c = 1; c < data[r].length; c += 1) {
+				newData[r-1].push( {value: data[r][c] } );
+			}
+		}
+
+		return newData;
+	};
+
+	service.transformHeaders = function (data) {
+		var newHeaders = { rows: [], columns: [] };
+
+		for (var r = 0; r < data.length; r += 1) {
+			if (r === 0) {
+				for (var c = 1; c < data[r].length; c += 1) {
+					newHeaders.columns.push( {value: data[r][c]} );
+				}
+			} else {
+				newHeaders.rows.push( {value: data[r][0]} );
+			}
+		}
+
+		return newHeaders;
+	};
+
+	return service;
+
+}]);
+
 app.directive('abc', [function () {
 
 	return {
@@ -33,6 +70,11 @@ app.directive('abc', [function () {
 			// Default sizes
 			$scope.input.width = $scope.input.width || 0;
 			$scope.input.height = $scope.input.height || 0;
+			// Default Headers
+			$scope.input.headers = $scope.input.headers || {};
+			$scope.input.headers.size = $scope.input.headers.size || 10;
+			$scope.input.headers.columns = $scope.input.headers.columns || [];
+			$scope.input.headers.rows = $scope.input.headers.rows || [];
 			// Default data
 			$scope.input.data = $scope.input.data || [];
 			// Default colors
@@ -62,6 +104,20 @@ app.directive('abc', [function () {
 			$scope.settings = $scope.input;
 
 			$scope.abc = {
+				mouseOffset: {
+					x: 0,
+					y: 0
+				},
+				max: function (value1, value2) {
+					if (value1 < value2) {
+						return value1;
+					}
+					return value2;
+				},
+				setMouseOffset: function ($event) {
+					$scope.abc.mouseOffset.x = $event.offsetX;
+					$scope.abc.mouseOffset.y = $event.offsetY;
+				},
 				setHovering: function (indexP, index) {
 					$scope.settings.hovering.y = indexP !== undefined ? indexP : -1;
 					$scope.settings.hovering.x = index !== undefined ? index : -1;
