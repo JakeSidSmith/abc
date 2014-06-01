@@ -1,6 +1,6 @@
 <svg ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" ng-mousemove="abc.setMouseOffset($event)" >
     <!-- Title -->
-    <text ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
+    <text id="abc-title" ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
     <!-- Line -->
     <g ng-show="settings.type === 'line'" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
         <polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getPoints($index)}}" stroke-width="2" fill="none" />
@@ -49,9 +49,9 @@
 		<g ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
 	    <!-- Popup Legend -->
 	    <g ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-transform="translate({{abc.popupLegendX()}}, {{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y - 10}})" >
-	      <rect x="0" y="0" ng-attr-width="{{abc.getTextLength('#popup-column-text') + abc.getTextLength('#popup-value-text') + 16}}" height="20" fill-opacity="0.8" stroke-opacity="0.5" fill="white" stroke="black" stroke-width="1" />
-	      <text id="popup-column-text" x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.headers.rows[settings.hovering.y].value"></text>
-	      <text id="popup-value-text" ng-attr-x="{{abc.getTextLength('#popup-column-text') + 8}}" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="abc.valueInUnit(settings.hovering.y, settings.hovering.x)"></text>
+	      <rect x="0" y="0" ng-attr-width="{{abc.getTextLength('#abc-popup-column-text') + abc.getTextLength('#abc-popup-value-text') + 16}}" height="20" fill-opacity="0.8" stroke-opacity="0.5" fill="white" stroke="black" stroke-width="1" />
+	      <text id="abc-popup-column-text" x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.headers.rows[settings.hovering.y].value"></text>
+	      <text id="abc-popup-value-text" ng-attr-x="{{abc.getTextLength('#abc-popup-column-text') + 8}}" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="abc.valueInUnit(settings.hovering.y, settings.hovering.x)"></text>
 	    </g>
 		</g>
 </svg>

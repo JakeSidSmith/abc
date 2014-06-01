@@ -139,15 +139,13 @@ app.directive('abc', [function () {
 				},
 				titleOffset: function () {
 					var getX = function () {
-						if ($scope.settings.title.align === 'center') {
-							return $scope.settings.width / 2;
-						}
 						if ($scope.settings.title.align === 'left') {
 							return $scope.settings.margin;
 						}
 						if ($scope.settings.title.align === 'right') {
-						  return $scope.settings.width - $scope.settings.margin;
+						  return $scope.settings.width - $scope.settings.margin - $scope.abc.getTextLength('#abc-title');
 						}
+						return $scope.settings.width / 2;
 					};
 					return {
 						x: getX(),
@@ -165,10 +163,10 @@ app.directive('abc', [function () {
 					return text[0].getComputedTextLength();
 				},
 				titleAnchor: function () {
-					if ($scope.settings.title.align === 'center') {
-						return 'middle';
+					if ($scope.settings.title.align === 'left' || $scope.settings.title.align === 'right') {
+						return $scope.settings.title.align;
 					}
-					return $scope.settings.title.align;
+					return 'middle';
 				},
 				highLow: function () {
 					var lowestSet = false;
@@ -207,9 +205,9 @@ app.directive('abc', [function () {
 				},
 				popupLegendX: function () {
 					var rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
-					var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#popup-column-text') - $scope.abc.getTextLength('#popup-value-text');
+					var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
 					if (rightOffset > maxOffset) {
-						return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#popup-column-text') - $scope.abc.getTextLength('#popup-value-text');
+						return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
 					}
 					return rightOffset;
 				},
