@@ -207,6 +207,14 @@ app.directive('abc', [function () {
 					}
 					return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? 5 : 2.5;
 				},
+				popupLegendX: function () {
+					var rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
+					var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#popup-column-text') - $scope.abc.getTextLength('#popup-value-text');
+					if (rightOffset > maxOffset) {
+						return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#popup-column-text') - $scope.abc.getTextLength('#popup-value-text');
+					}
+					return rightOffset;
+				},
 				calculatePoint: function (indexP, index) {
 					var x, y;
 					if (indexP < 0) {
