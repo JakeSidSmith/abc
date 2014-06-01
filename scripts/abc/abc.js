@@ -225,6 +225,9 @@ app.directive('abc', [function () {
 					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
 					return $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
 				},
+				calculatePointXValue: function (value) {
+					return $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * value;
+				},
 				calculatePoint: function (indexP, index) {
 					var x, y;
 					if (indexP < 0) {
@@ -234,7 +237,7 @@ app.directive('abc', [function () {
 					} else {
 						y = $scope.abc.calculatePointYValue($scope.settings.data[indexP][index].value);
 					}
-					x = $scope.abc.chartOffset().width / ($scope.settings.data[indexP].length-1) * index;
+					x = $scope.abc.calculatePointXValue(index);
 					return {x: x, y: y};
 				},
 				getPoints: function (indexP) {
@@ -259,10 +262,10 @@ app.directive('abc', [function () {
 						if (index !== 0) {
 							first = '';
 						}
-						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * index) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value - $scope.abc.axisLineSize - $scope.settings.headers.size);
+						var final = first + $scope.abc.calculatePoint(indexP, index).x + ' ' + $scope.abc.calculatePoint(indexP, index).y;
 						if (index < $scope.settings.data[indexP].length-1) {
-							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * index) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * 0.5) +
-									' ' + (($scope.settings.height - $scope.settings.margin*2 - item.value) + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.data[indexP][index + 1].value)) * 0.5;
+							final += ' C ' + $scope.abc.calculatePointXValue(index + 0.3) + ' ' + $scope.abc.calculatePoint(indexP, index).y +
+								' ' + $scope.abc.calculatePointXValue(index + 0.7) + ' ' + $scope.abc.calculatePoint(indexP, index+1).y;
 						}
 						return final;
 					}).join(' ');
