@@ -268,22 +268,26 @@ app.directive('abc', [function () {
 				calculateBarWidth: function () {
 					return $scope.abc.chartOffset().width / $scope.settings.data.length / $scope.settings.data[0].length;
 				},
+				calculateBarY: function (value) {
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
+					return $scope.abc.chartOffset().height - value * multiplier + $scope.abc.highLow().lowest * multiplier;
+				},
 				calculateBarX: function (indexP, index) {
 					return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
 				},
-				getBarOffset: function (indexP, index) {
+				barOffset: function (indexP, index) {
 					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
 					if ($scope.settings.data[indexP][index].value < 0) {
 						return {
 							x: $scope.abc.calculateBarX(indexP, index),
-							y: $scope.abc.calculatePointYValue(0),
+							y: $scope.abc.calculateBarY(0),
 							width: $scope.abc.calculateBarWidth(indexP, index),
 							height: $scope.settings.data[indexP][index].value * -multiplier
 						};
 					}
 					return {
 						x: $scope.abc.calculateBarX(indexP, index),
-						y: $scope.abc.calculatePointYValue($scope.settings.data[indexP][index].value),
+						y: $scope.abc.calculateBarY($scope.settings.data[indexP][index].value),
 						width: $scope.abc.calculateBarWidth(indexP, index),
 						height: $scope.settings.data[indexP][index].value * multiplier
 					};
@@ -292,7 +296,7 @@ app.directive('abc', [function () {
 					if ($scope.settings.hovering.y < 0 || $scope.settings.hovering.x < 0) {
 						return {x1: -10, y1: -10, x2: -10, y2: -10};
 					}
-					var barOffset = $scope.abc.getBarOffset($scope.settings.hovering.y, $scope.settings.hovering.x);
+					var barOffset = $scope.abc.barOffset($scope.settings.hovering.y, $scope.settings.hovering.x);
 					if ($scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value >= 0) {
 						return {
 							x1: barOffset.x,
