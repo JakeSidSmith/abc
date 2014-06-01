@@ -179,12 +179,12 @@ app.directive('abc', [function () {
 					var highest = 0;
 					angular.forEach($scope.settings.data, function (row) {
 						angular.forEach(row, function (item) {
-							if (item < lowest || lowestSet === false) {
-								lowest = item;
+							if (item.value < lowest || lowestSet === false) {
+								lowest = item.value;
 								lowestSet = true;
 							}
-							if (item > highest || highestSet === false) {
-								highest = item;
+							if (item.value > highest || highestSet === false) {
+								highest = item.value;
 								highestSet = true;
 							}
 						});
@@ -195,7 +195,7 @@ app.directive('abc', [function () {
 					};
 				},
 				highLowDif: function () {
-					var highLow = this.highLow();
+					var highLow = $scope.abc.highLow();
 					return this.difference(highLow.lowest, highLow.highest);
 				},
 				difference: function (value1, value2) {
@@ -207,34 +207,39 @@ app.directive('abc', [function () {
 					}
 					return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? 5 : 2.5;
 				},
-				getPoints: function (index) {
-					var points = $scope.settings.data[index].map(function (item, itemIndex) {
-						return (($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) +
-							',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value  - $scope.abc.axisLineSize - $scope.settings.headers.size);
+				calculatePoint: function (indexP, index, item) {
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
+					var x = $scope.abc.chartOffset().width / ($scope.settings.data[indexP].length-1) * index;
+					var y = $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - item.value * multiplier;
+					return [x, y];
+				},
+				getPoints: function (indexP) {
+					var points = $scope.settings.data[indexP].map(function (item, index) {
+						return $scope.abc.calculatePoint(indexP, index, item).join(',');
 					}).join(',');
 
 					return points;
 				},
-				getAreaPoints: function (index) {
-					var points = $scope.settings.data[index].map(function (item, itemIndex) {
-						return (($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) +
+				getAreaPoints: function (indexP) {
+					var points = $scope.settings.data[indexP].map(function (item, index) {
+						return (($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * index) +
 						',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value  - $scope.abc.axisLineSize - $scope.settings.headers.size);
 					});
 					points.unshift('0,' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size  - $scope.abc.axisLineSize - $scope.settings.headers.size));
 					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.abc.axisLineSize - $scope.settings.headers.size));
 					return points.join(',');
 				},
-				getSplinePoints: function (index) {
-					return $scope.settings.data[index].map(function (item, itemIndex) {
+				getSplinePoints: function (indexP) {
+					return $scope.settings.data[indexP].map(function (item, index) {
 						var first = 'M';
 
-						if (itemIndex !== 0) {
+						if (index !== 0) {
 							first = '';
 						}
-						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value - $scope.abc.axisLineSize - $scope.settings.headers.size);
-						if (itemIndex < $scope.settings.data[index].length-1) {
-							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * itemIndex) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[index].length-1) * 0.5) +
-									' ' + (($scope.settings.height - $scope.settings.margin*2 - item.value) + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.data[index][itemIndex + 1].value)) * 0.5;
+						var final = first + (($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * index) + ' ' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - item.value - $scope.abc.axisLineSize - $scope.settings.headers.size);
+						if (index < $scope.settings.data[indexP].length-1) {
+							final += ' S ' + ((($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * index) + ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[indexP].length-1) * 0.5) +
+									' ' + (($scope.settings.height - $scope.settings.margin*2 - item.value) + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.data[indexP][index + 1].value)) * 0.5;
 						}
 						return final;
 					}).join(' ');
