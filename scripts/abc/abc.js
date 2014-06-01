@@ -257,12 +257,7 @@ app.directive('abc', [function () {
 				},
 				getSplinePoints: function (indexP) {
 					return $scope.settings.data[indexP].map(function (item, index) {
-						var first = 'M';
-
-						if (index !== 0) {
-							first = '';
-						}
-						var final = first + $scope.abc.calculatePoint(indexP, index).x + ' ' + $scope.abc.calculatePoint(indexP, index).y;
+						var final = (index === 0 ? 'M' : '') + $scope.abc.calculatePoint(indexP, index).x + ' ' + $scope.abc.calculatePoint(indexP, index).y;
 						if (index < $scope.settings.data[indexP].length-1) {
 							final += ' C ' + $scope.abc.calculatePointXValue(index + 0.3) + ' ' + $scope.abc.calculatePoint(indexP, index).y +
 								' ' + $scope.abc.calculatePointXValue(index + 0.7) + ' ' + $scope.abc.calculatePoint(indexP, index+1).y;
