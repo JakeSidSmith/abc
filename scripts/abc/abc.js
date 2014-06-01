@@ -113,12 +113,6 @@ app.directive('abc', [function () {
 					x: 0,
 					y: 0
 				},
-				max: function (value1, value2) {
-					if (value1 < value2) {
-						return value1;
-					}
-					return value2;
-				},
 				setMouseOffset: function ($event) {
 					$scope.abc.mouseOffset.x = $event.offsetX;
 					$scope.abc.mouseOffset.y = $event.offsetY;
