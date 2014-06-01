@@ -126,16 +126,16 @@ app.directive('abc', [function () {
 					return {
 						x: $scope.settings.margin,
 						y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-						width: $scope.settings.width - $scope.settings.margin*2,
-						height: $scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.abc.axisLineSize - $scope.settings.headers.size
+						width: Math.max($scope.settings.width - $scope.settings.margin*2, 0),
+						height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.abc.axisLineSize - $scope.settings.headers.size, 0)
 					};
 				},
 				axisOffset: function () {
 					return {
 						x: $scope.settings.margin,
 						y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-						width: $scope.settings.width - $scope.settings.margin,
-						height: $scope.settings.height - $scope.settings.margin - $scope.abc.axisLineSize - $scope.settings.headers.size
+						width: Math.max($scope.settings.width - $scope.settings.margin, 0),
+						height: Math.max($scope.settings.height - $scope.settings.margin - $scope.abc.axisLineSize - $scope.settings.headers.size, 0)
 					};
 				},
 				titleOffset: function () {
@@ -285,15 +285,21 @@ app.directive('abc', [function () {
 						return {
 							x: $scope.abc.calculateBarX(indexP, index),
 							y: $scope.abc.calculateBarY(0),
-							width: $scope.abc.calculateBarWidth(indexP, index),
-							height: $scope.settings.data[indexP][index].value * -multiplier
+							width: Math.max($scope.abc.calculateBarWidth(indexP, index), 0),
+							height: Math.max($scope.settings.data[indexP][index].value * -multiplier, 0)
 						};
 					}
 					return {
 						x: $scope.abc.calculateBarX(indexP, index),
 						y: $scope.abc.calculateBarY($scope.settings.data[indexP][index].value),
-						width: $scope.abc.calculateBarWidth(indexP, index),
-						height: $scope.settings.data[indexP][index].value * multiplier
+						width: Math.max($scope.abc.calculateBarWidth(indexP, index), 0),
+						height: Math.max($scope.settings.data[indexP][index].value * multiplier, 0)
+					};
+				},
+				hoverAreaOffset: function (index) {
+					return {
+						x: $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
+						width: Math.max($scope.abc.chartOffset().width / ($scope.settings.data[0].length-1), 0)
 					};
 				},
 				hoveringBarOffset: function () {
