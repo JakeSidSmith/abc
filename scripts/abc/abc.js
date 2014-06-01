@@ -270,7 +270,7 @@ app.directive('abc', [function () {
 				},
 				calculateBarY: function (value) {
 					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-					return $scope.abc.chartOffset().height - value * multiplier + $scope.abc.highLow().lowest * multiplier;
+					return $scope.abc.chartOffset().height - (value - $scope.abc.highLow().lowest) * multiplier;
 				},
 				calculateBarX: function (indexP, index) {
 					return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
