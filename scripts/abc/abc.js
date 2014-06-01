@@ -61,6 +61,10 @@ app.directive('abc', [function () {
 			$scope.input.hovering.y = $scope.input.hovering.y || -1;
 			// Default chart type
 			$scope.input.type = $scope.input.type || 'line';
+			// Default unit
+			$scope.input.unit = $scope.input.unit || {};
+			$scope.input.unit.type = $scope.input.unit.type || '%';
+			$scope.input.unit.position = $scope.input.unit.position || 'after';
 			// Default resize settings
 			$scope.input.resize = $scope.input.resize || {};
 			$scope.input.resize.width = $scope.input.resize.width === false ? false : true;
@@ -214,6 +218,15 @@ app.directive('abc', [function () {
 						return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#popup-column-text') - $scope.abc.getTextLength('#popup-value-text');
 					}
 					return rightOffset;
+				},
+				valueInUnit: function (indexP, index) {
+					if (indexP < 0 || index < 0) {
+						return '';
+					}
+					if ($scope.settings.unit.position === 'before') {
+						return $scope.settings.unit.type + $scope.settings.data[indexP][index].value;
+					}
+					return $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
 				},
 				calculatePoint: function (indexP, index) {
 					var x, y;
