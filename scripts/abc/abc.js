@@ -225,8 +225,8 @@ app.directive('abc', [function () {
 					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
 					return $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
 				},
-				calculatePointXValue: function (value) {
-					return $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * value;
+				calculatePointXValue: function (index) {
+					return $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * index;
 				},
 				calculatePoint: function (indexP, index) {
 					var x, y;
@@ -264,6 +264,49 @@ app.directive('abc', [function () {
 						}
 						return final;
 					}).join(' ');
+				},
+				calculateBarWidth: function () {
+					return $scope.abc.chartOffset().width / $scope.settings.data.length / $scope.settings.data[0].length;
+				},
+				calculateBarX: function (indexP, index) {
+					return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
+				},
+				getBarOffset: function (indexP, index) {
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
+					if ($scope.settings.data[indexP][index].value < 0) {
+						return {
+							x: $scope.abc.calculateBarX(indexP, index),
+							y: $scope.abc.calculatePointYValue(0),
+							width: $scope.abc.calculateBarWidth(indexP, index),
+							height: $scope.settings.data[indexP][index].value * -multiplier
+						};
+					}
+					return {
+						x: $scope.abc.calculateBarX(indexP, index),
+						y: $scope.abc.calculatePointYValue($scope.settings.data[indexP][index].value),
+						width: $scope.abc.calculateBarWidth(indexP, index),
+						height: $scope.settings.data[indexP][index].value * multiplier
+					};
+				},
+				hoveringBarOffset: function () {
+					if ($scope.settings.hovering.y < 0 || $scope.settings.hovering.x < 0) {
+						return {x1: -10, y1: -10, x2: -10, y2: -10};
+					}
+					var barOffset = $scope.abc.getBarOffset($scope.settings.hovering.y, $scope.settings.hovering.x);
+					if ($scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value >= 0) {
+						return {
+							x1: barOffset.x,
+							y1: barOffset.y,
+							x2: barOffset.x + $scope.abc.calculateBarWidth(),
+							y2: barOffset.y
+						};
+					}
+					return {
+						x1: barOffset.x,
+						y1: barOffset.y + barOffset.height,
+						x2: barOffset.x + $scope.abc.calculateBarWidth(),
+						y2: barOffset.y + barOffset.height
+					};
 				},
 				hoveringClass: function (index) {
 					if ($scope.settings.hovering.y >= 0) {
