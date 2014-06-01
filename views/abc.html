@@ -32,6 +32,8 @@
     <line ng-show="settings.type === 'bar' && settings.hovering.y >= 0" ng-attr-x1="{{abc.hoveringBar().x1}}" ng-attr-y1="{{settings.height - settings.margin - abc.axisLineSize - settings.headers.size - settings.data[settings.hovering.y][settings.hovering.x].value - 1}}" ng-attr-x2="{{abc.hoveringBar().x2}}" ng-attr-y2="{{settings.height - settings.margin - abc.axisLineSize - settings.headers.size - settings.data[settings.hovering.y][settings.hovering.x].value - 1}}" stroke-width="2" stroke="black" />
     <!-- Hovering lines & areas -->
 		<g ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
+			<!-- Zero Line -->
+			<line ng-show="abc.calculatePointYValue(0) >= 0 && abc.calculatePointYValue(0) <= abc.chartOffset().height" x1="0" ng-attr-y1="{{abc.calculatePointYValue(0)}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePointYValue(0)}}" stroke-width="2" stroke-opacity="0.5" stroke="black" />
 			<!-- Horizontal Line -->
 	    <line ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" x1="0" ng-attr-y1="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
 	    <!-- Vertical Line -->

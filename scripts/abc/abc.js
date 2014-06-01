@@ -222,6 +222,10 @@ app.directive('abc', [function () {
 					}
 					return $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
 				},
+				calculatePointYValue: function (value) {
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
+					return $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
+				},
 				calculatePoint: function (indexP, index) {
 					var x, y;
 					if (indexP < 0) {
@@ -229,8 +233,7 @@ app.directive('abc', [function () {
 					} else if (index < 0) {
 						y = -10;
 					} else {
-						var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-						y = $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - $scope.settings.data[indexP][index].value * multiplier;
+						y = $scope.abc.calculatePointYValue($scope.settings.data[indexP][index].value);
 					}
 					x = $scope.abc.chartOffset().width / ($scope.settings.data[indexP].length-1) * index;
 					return {x: x, y: y};
