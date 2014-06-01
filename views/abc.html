@@ -38,9 +38,9 @@
 				<circle ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-cx="{{$index * (settings.width-settings.margin*2) / (points.length - 1)}}" ng-attr-cy="{{(settings.height - settings.margin*2 - settings.title.size  - abc.axisLineSize - settings.headers.size) - point.value}}" ng-attr-r="{{abc.pointRadius($parent.$index, $index)}}" />
 		</g>
 		<!-- Popup Legend -->
-		<g ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-transform="translate({{abc.max( ( (settings.width - settings.margin*2) / (settings.data[0].length-1) * settings.hovering.x + settings.margin + 10), abc.axisOffset().width - 110)}}, {{abc.axisOffset().height - settings.data[settings.hovering.y][settings.hovering.x].value - 10}})" >
-			<rect x="0" y="0" width="100" height="20" fill-opacity="0.8" stroke-opacity="0.5" fill="white" stroke="black" stroke-width="1" />
-			<text x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.headers.rows[settings.hovering.y].value"></text>
-			<text x="50" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.data[settings.hovering.y][settings.hovering.x].value"></text>
+		<g ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-transform="translate({{abc.max( ( (settings.width - settings.margin*2) / (settings.data[0].length-1) * settings.hovering.x + settings.margin + 10), abc.axisOffset().width - (abc.getTextLength('#popup-column-text') + abc.getTextLength('#popup-value-text') + 16) - 10)}}, {{abc.axisOffset().height - settings.data[settings.hovering.y][settings.hovering.x].value - 10}})" >
+			<rect x="0" y="0" ng-attr-width="{{abc.getTextLength('#popup-column-text') + abc.getTextLength('#popup-value-text') + 16}}" height="20" fill-opacity="0.8" stroke-opacity="0.5" fill="white" stroke="black" stroke-width="1" />
+			<text id="popup-column-text" x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.headers.rows[settings.hovering.y].value"></text>
+			<text id="popup-value-text" ng-attr-x="{{abc.getTextLength('#popup-column-text') + 8}}" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.data[settings.hovering.y][settings.hovering.x].value"></text>
 		</g>
 </svg>

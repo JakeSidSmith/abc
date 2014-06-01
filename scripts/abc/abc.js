@@ -162,6 +162,10 @@ app.directive('abc', [function () {
 					}
 					return 0;
 				},
+				getTextLength: function (search) {
+					var text = $element.find(search);
+					return text[0].getComputedTextLength();
+				},
 				titleAnchor: function () {
 					if ($scope.settings.title.align === 'center') {
 						return 'middle';
