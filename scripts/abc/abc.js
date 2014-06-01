@@ -153,7 +153,7 @@ app.directive('abc', [function () {
 					};
 					return {
 						x: getX(),
-						y: $scope.settings.title.size
+						y: $scope.settings.title.size + $scope.settings.margin
 					};
 				},
 				verticalLineOffset: function () {

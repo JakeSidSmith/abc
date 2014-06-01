@@ -17,14 +17,17 @@
 		<g ng-show="settings.type === 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
 				<rect ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-x="{{$index * (settings.width-settings.margin*2) / (points.length) + $parent.$index * (settings.width-settings.margin*2) / (points.length) / settings.data.length}}" ng-attr-y="{{settings.height - settings.margin*2 - abc.axisLineSize - settings.headers.size - settings.title.size - point.value}}" ng-attr-width="{{(settings.width-settings.margin*2) / (points.length) / settings.data.length}}" ng-attr-height="{{point.value}}" />
 		</g>
-		<!-- X Axis -->
-		<line stroke="black" ng-attr-x1="{{abc.axisOffset().x}}" ng-attr-y1="{{abc.axisOffset().y}}" ng-attr-x2="{{abc.axisOffset().x}}" ng-attr-y2="{{abc.axisOffset().height}}" />
-		<!-- Y Axis -->
-		<line stroke="black" ng-attr-x1="{{abc.axisOffset().x}}" ng-attr-y1="{{abc.axisOffset().height}}" ng-attr-x2="{{abc.axisOffset().width}}" ng-attr-y2="{{abc.axisOffset().height}}" />
-		<!-- X Axis Lines -->
-		<line ng-repeat="point in settings.data[0]" ng-attr-x1="{{settings.margin + abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y1="{{abc.axisOffset().height}}" ng-attr-x2="{{settings.margin + abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y2="{{abc.axisOffset().height + abc.axisLineSize}}" stroke="black" stroke-width="1" />
-		<!-- X Axis Labels -->
-		<text ng-repeat="column in settings.headers.columns" ng-attr-x="{{settings.margin + abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y="{{abc.axisOffset().height + abc.axisLineSize + settings.headers.size}}" text-anchor="middle" ng-bind="column.value" ng-attr-font-size="{{settings.headers.size}}"></text>
+		<!-- Axis -->
+		<g ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
+			<!-- Y Axis -->
+			<line stroke="black" x1="0" y1="0" x2="0" ng-attr-y2="{{abc.chartOffset().height}}" />
+			<!-- X Axis -->
+			<line stroke="black" x1="0" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.chartOffset().height}}" />
+			<!-- X Axis Lines -->
+			<line ng-repeat="point in settings.data[0]" ng-attr-x1="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y2="{{abc.chartOffset().height + abc.axisLineSize}}" stroke="black" stroke-width="1" />
+			<!-- X Axis Labels -->
+			<text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y="{{abc.chartOffset().height + abc.axisLineSize + settings.headers.size}}" text-anchor="middle" ng-bind="column.value" ng-attr-font-size="{{settings.headers.size}}"></text>
+		</g>
 		<!-- Bar Top -->
 		<line ng-show="settings.type === 'bar' && settings.hovering.y >= 0" ng-attr-x1="{{abc.hoveringBar().x1}}" ng-attr-y1="{{settings.height - settings.margin - abc.axisLineSize - settings.headers.size - settings.data[settings.hovering.y][settings.hovering.x].value - 1}}" ng-attr-x2="{{abc.hoveringBar().x2}}" ng-attr-y2="{{settings.height - settings.margin - abc.axisLineSize - settings.headers.size - settings.data[settings.hovering.y][settings.hovering.x].value - 1}}" stroke-width="2" stroke="black" />
 		<!-- Horizontal Line -->
