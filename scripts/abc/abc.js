@@ -195,6 +195,10 @@ app.directive('abc', [function () {
 					var highLow = $scope.abc.highLow();
 					return this.difference(highLow.lowest, highLow.highest);
 				},
+				highLowBarDif: function () {
+					var highLow = $scope.abc.highLow();
+					return this.difference(Math.min(highLow.lowest, 0), Math.max(highLow.highest, 0));
+				},
 				difference: function (value1, value2) {
 					return Math.abs(value1 - value2);
 				},
@@ -269,15 +273,15 @@ app.directive('abc', [function () {
 					return $scope.abc.chartOffset().width / $scope.settings.data.length / $scope.settings.data[0].length;
 				},
 				calculateBarY: function (value) {
-					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-					return $scope.abc.chartOffset().height - (value - $scope.abc.highLow().lowest) * multiplier;
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
+					return $scope.abc.chartOffset().height - value * multiplier + Math.min($scope.abc.highLow().lowest, 0) * multiplier;
 				},
 				calculateBarX: function (indexP, index) {
 					return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
 				},
 				barOffset: function (indexP, index) {
-					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-					if ($scope.settings.data[indexP][index].value < 0) {
+					var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
+					if ($scope.settings.data[indexP][index].value <= 0) {
 						return {
 							x: $scope.abc.calculateBarX(indexP, index),
 							y: $scope.abc.calculateBarY(0),
