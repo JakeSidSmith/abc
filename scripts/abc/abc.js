@@ -55,6 +55,7 @@ app.directive('abc', [function () {
 			$scope.input.title.size = $scope.input.title.size || 12;
 			$scope.input.title.show = $scope.input.title.show === false ? false : true;
 			$scope.input.title.align = $scope.input.title.align || 'center';
+			$scope.input.title.margin = $scope.input.title.margin || 10;
 			// Default hovering indices
 			$scope.input.hovering = $scope.input.hovering || {};
 			$scope.input.hovering.x = $scope.input.hovering.x || -1;
@@ -124,15 +125,15 @@ app.directive('abc', [function () {
 				chartOffset: function () {
 					return {
 						x: $scope.settings.margin,
-						y: $scope.settings.margin + $scope.settings.title.size,
+						y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
 						width: $scope.settings.width - $scope.settings.margin*2,
-						height: $scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.abc.axisLineSize - $scope.settings.headers.size
+						height: $scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.abc.axisLineSize - $scope.settings.headers.size
 					};
 				},
 				axisOffset: function () {
 					return {
 						x: $scope.settings.margin,
-						y: $scope.settings.margin + $scope.settings.title.size,
+						y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
 						width: $scope.settings.width - $scope.settings.margin,
 						height: $scope.settings.height - $scope.settings.margin - $scope.abc.axisLineSize - $scope.settings.headers.size
 					};
@@ -247,8 +248,8 @@ app.directive('abc', [function () {
 					var points = $scope.settings.data[indexP].map(function (item, index) {
 						return $scope.abc.calculatePoint(indexP, index).x + ',' + $scope.abc.calculatePoint(indexP, index).y;
 					});
-					points.unshift('0,' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size  - $scope.abc.axisLineSize - $scope.settings.headers.size));
-					points.push(($scope.settings.width - $scope.settings.margin*2) + ',' + ($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.abc.axisLineSize - $scope.settings.headers.size));
+					points.unshift('0,' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
+					points.push($scope.abc.chartOffset().width + ',' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
 					return points.join(',');
 				},
 				getSplinePoints: function (indexP) {
