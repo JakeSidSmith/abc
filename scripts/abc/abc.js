@@ -62,6 +62,10 @@ app.directive('abc', [function () {
 			$scope.input.hovering.y = $scope.input.hovering.y || -1;
 			// Default chart type
 			$scope.input.type = $scope.input.type || 'line';
+			// Default chart element sizes
+			$scope.input.lineWidth = $scope.input.lineWidth || 2;
+			$scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
+			$scope.input.pointWidth = $scope.input.pointWidth || 2.5;
 			// Default unit
 			$scope.input.unit = $scope.input.unit || {};
 			$scope.input.unit.type = $scope.input.unit.type || '%';
@@ -204,9 +208,9 @@ app.directive('abc', [function () {
 				},
 				pointRadius: function (indexP, index)  {
 					if ($scope.settings.hovering.y < 0) {
-						return $scope.settings.hovering.x === index ? 5 : 2.5;
+						return $scope.settings.hovering.x === index ? $scope.settings.pointWidth*2 : $scope.settings.pointWidth;
 					}
-					return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? 5 : 2.5;
+					return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointWidth*2 : $scope.settings.pointWidth;
 				},
 				popupLegendX: function () {
 					var rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
