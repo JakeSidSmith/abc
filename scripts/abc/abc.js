@@ -348,9 +348,6 @@ app.directive('abc', [function () {
 						x1: -100,
 						x2: -100
 					};
-				},
-				chartWidth: function () {
-					return $element[0].offsetWidth;
 				}
 			};
 
