@@ -47,7 +47,7 @@ app.directive('abc', [function () {
     scope: {
       input: '=data'
     },
-    templateUrl: '/views/abc/abc.html',
+    templateUrl: '/views/abc.html',
     controller: function ($scope, $element, $window) {
       // Default title
       $scope.input.title = $scope.input.title || {};
