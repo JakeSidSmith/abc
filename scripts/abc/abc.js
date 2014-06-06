@@ -66,6 +66,7 @@ app.directive('abc', [function () {
       $scope.input.lineWidth = $scope.input.lineWidth || 2;
       $scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
       $scope.input.pointWidth = $scope.input.pointWidth || 2.5;
+      $scope.input.pointHoverWidth = $scope.input.pointHoverWidth || 4;
       // Default unit
       $scope.input.unit = $scope.input.unit || {};
       $scope.input.unit.type = $scope.input.unit.type || '%';
@@ -208,9 +209,9 @@ app.directive('abc', [function () {
         },
         pointRadius: function (indexP, index)  {
           if ($scope.settings.hovering.y < 0) {
-            return $scope.settings.hovering.x === index ? $scope.settings.pointWidth*2 : $scope.settings.pointWidth;
+            return $scope.settings.hovering.x === index ? $scope.settings.pointHoverWidth : $scope.settings.pointWidth;
           }
-          return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointWidth*2 : $scope.settings.pointWidth;
+          return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverWidth : $scope.settings.pointWidth;
         },
         popupLegendX: function () {
           var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
