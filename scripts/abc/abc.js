@@ -213,8 +213,16 @@ app.directive('abc', [function () {
           return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointWidth*2 : $scope.settings.pointWidth;
         },
         popupLegendX: function () {
-          var rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
           var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+          var rightOffset = 0;
+          if ($scope.settings.type === 'bar') {
+            rightOffset = $scope.abc.hoveringBar().x2;
+            if (rightOffset > maxOffset) {
+              return $scope.abc.calculateBarX($scope.settings.hovering.y, $scope.settings.hovering.x) - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+            }
+            return $scope.abc.hoveringBar().x2;
+          }
+          rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
           if (rightOffset > maxOffset) {
             return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
           }
