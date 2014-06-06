@@ -21,7 +21,7 @@
     </g>
     <!-- Bar -->
     <g ng-show="settings.type === 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
-        <rect ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}" />
+        <rect ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}" />
     </g>
     <!-- Axis -->
     <g ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
@@ -46,6 +46,10 @@
       <line ng-show="settings.hovering.y < 0 && settings.hovering.x >= 0" ng-attr-x1="{{abc.verticalLineOffset()}}" y1="0" ng-attr-x2="{{abc.verticalLineOffset()}}" ng-attr-y2="{{abc.chartOffset().height}}" stroke-width="1" stroke-opacity="0.5" stroke="black" />
       <!-- Hovering Areas -->
       <rect ng-show="settings.type !== 'bar'" ng-repeat="line in settings.data[0]" ng-attr-x="{{abc.hoverAreaOffset($index).x}}" y="0" ng-attr-width="{{abc.hoverAreaOffset().width}}" ng-attr-height="{{abc.chartOffset().height}}" ng-mouseover="abc.setHovering(undefined, $index)" ng-mouseout="abc.setHovering()" fill="rgba(0, 0, 0, 0)" />
+      <!-- Hovering Areas for Bar -->
+      <g ng-show="settings.type === 'bar'" ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data">
+          <rect ng-mouseover="abc.setHovering($parent.$index, $index)" ng-mouseout="abc.setHovering()" ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" y="0" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.chartOffset().height}}" fill="rgba(0, 0, 0, 0)" />
+      </g>
     </g>
     <!-- Points -->
     <g ng-show="settings.type !== 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
