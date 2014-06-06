@@ -30,9 +30,9 @@
       <!-- X Axis -->
       <line ng-attr-stroke-width="{{settings.axisLineWidth}}" stroke="black" x1="0" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.chartOffset().height}}" />
       <!-- X Axis Lines -->
-      <line ng-repeat="point in settings.data[0]" ng-attr-x1="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y2="{{abc.chartOffset().height + abc.axisLineSize}}" stroke="black" stroke-width="1" />
+      <line ng-repeat="point in settings.data[0]" ng-attr-x1="{{abc.calculatePointXValue($index)}}" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.calculatePointXValue($index)}}" ng-attr-y2="{{abc.chartOffset().height + abc.axisLineSize}}" stroke="black" stroke-width="1" />
       <!-- X Axis Labels -->
-      <text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.chartOffset().width / (settings.data[0].length-1) * $index}}" ng-attr-y="{{abc.chartOffset().height + abc.axisLineSize + settings.headers.size}}" text-anchor="middle" ng-bind="column.value" ng-attr-font-size="{{settings.headers.size}}"></text>
+      <text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.calculatePointXValue($index)}}" ng-attr-y="{{abc.chartOffset().height + abc.axisLineSize + settings.headers.size}}" text-anchor="middle" ng-bind="column.value" ng-attr-font-size="{{settings.headers.size}}"></text>
     </g>
     <!-- Hovering lines & areas -->
     <g ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
