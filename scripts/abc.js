@@ -217,11 +217,11 @@ app.directive('abc', [function () {
           var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
           var rightOffset = 0;
           if ($scope.settings.type === 'bar') {
-            rightOffset = $scope.abc.hoveringBar().x2;
+            rightOffset = $scope.abc.hoveringBarOffset().x2 + 10;
             if (rightOffset > maxOffset) {
               return $scope.abc.calculateBarX($scope.settings.hovering.y, $scope.settings.hovering.x) - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
             }
-            return $scope.abc.hoveringBar().x2;
+            return rightOffset;
           }
           rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
           if (rightOffset > maxOffset) {
@@ -340,27 +340,6 @@ app.directive('abc', [function () {
             return index !== $scope.settings.hovering.y ? 'not-hovering' : '';
           }
           return '';
-        },
-        hoveringCircle: function () {
-          if ($scope.settings.hovering.y >= 0 && $scope.settings.hovering.x >= 0) {
-            return {
-              x: $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length-1) + $scope.settings.margin,
-              y: $scope.settings.height - $scope.settings.margin - $scope.settings.data[$scope.settings.hovering.y][$scope.settings.hovering.x].value
-            };
-          }
-          return {x: -100, y: -100};
-        },
-        hoveringBar: function () {
-          if ($scope.settings.hovering.y >= 0) {
-            var values = {};
-            values.x1 = $scope.settings.margin + ($scope.settings.hovering.x) * ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length) + $scope.settings.hovering.y * ($scope.settings.width-$scope.settings.margin*2) / ($scope.settings.data[$scope.settings.hovering.y].length) / $scope.settings.data.length;
-            values.x2 = values.x1 + ($scope.settings.width - $scope.settings.margin*2) / $scope.settings.data[$scope.settings.hovering.y].length / $scope.settings.data.length;
-            return values;
-          }
-          return {
-            x1: -100,
-            x2: -100
-          };
         }
       };
 
