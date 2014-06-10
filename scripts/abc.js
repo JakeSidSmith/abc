@@ -88,7 +88,7 @@ app.directive('abc', [function () {
       // Default data
       $scope.input.data = $scope.input.data || [];
       // Default colors
-      $scope.input.colors = $scope.input.colors || ['red', 'green', 'blue', 'orange', 'purple'];
+      $scope.input.colors = $scope.input.colors || ['#d24949', '#e59648', '#4f8f47', '#316e93', '#684c8a'];
       // Set chartStyles for resizing
       $scope.chartStyle = {};
       $scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
