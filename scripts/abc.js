@@ -73,6 +73,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
   $scope.input.pointWidth = $scope.input.pointWidth || 2.5;
   $scope.input.pointHoverWidth = $scope.input.pointHoverWidth || 4;
+  $scope.input.axisTickSize = $scope.input.axisTickSize || 4;
   // Default unit
   $scope.input.unit = $scope.input.unit || {};
   $scope.input.unit.type = $scope.input.unit.type || '%';
@@ -120,7 +121,6 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.settings = $scope.input;
 
   $scope.abc = {
-    axisLineSize: 4,
     mouseOffset: {
       x: 0,
       y: 0
@@ -138,7 +138,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         x: $scope.settings.margin,
         y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
         width: Math.max($scope.settings.width - $scope.settings.margin*2, 0),
-        height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.abc.axisLineSize - $scope.settings.headers.size, 0)
+        height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
       };
     },
     axisOffset: function () {
@@ -146,7 +146,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         x: $scope.settings.margin,
         y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
         width: Math.max($scope.settings.width - $scope.settings.margin, 0),
-        height: Math.max($scope.settings.height - $scope.settings.margin - $scope.abc.axisLineSize - $scope.settings.headers.size, 0)
+        height: Math.max($scope.settings.height - $scope.settings.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
       };
     },
     titleOffset: function () {
