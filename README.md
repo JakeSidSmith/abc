@@ -1,6 +1,6 @@
 # Angular Bound Charts
 
-##### Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependancies
+##### Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies
 
 This is a new project (with only a few days work), but I plan on keeping it updated, improving performance & will be adding tests & documentation shortly.
 
