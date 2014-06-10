@@ -1,4 +1,4 @@
-<svg ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" ng-mousemove="abc.setMouseOffset($event)" >
+<svg ng-class="settings.class" ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" ng-mousemove="abc.setMouseOffset($event)" >
     <!-- Title -->
     <text id="abc-title" ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
     <!-- Line -->
@@ -24,7 +24,7 @@
       <!-- X Axis -->
       <line ng-attr-stroke-width="{{settings.axisLineWidth}}" stroke="black" x1="0" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.chartOffset().height}}"></line>
       <!-- X Axis Ticks -->
-      <line ng-repeat="point in settings.data[0]" ng-attr-x1="{{abc.calculatePointXValue($index)}}" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.calculatePointXValue($index)}}" ng-attr-y2="{{abc.chartOffset().height + settings.axisTickSize}}" stroke="black" stroke-width="1"></line>
+      <line ng-repeat="point in settings.data[0]" ng-attr-x1="{{abc.calculatePointXValue($index)}}" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.calculatePointXValue($index)}}" ng-attr-y2="{{abc.chartOffset().height + settings.axisTickSize}}" stroke="black" ng-attr-stroke-width="{{settings.axisTickWidth}}"></line>
       <!-- X Axis Labels -->
       <text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.calculatePointXValue($index)}}" ng-attr-y="{{abc.chartOffset().height + settings.axisTickSize + settings.headers.size}}" text-anchor="middle" ng-bind="column.value" ng-attr-font-size="{{settings.headers.size}}"></text>
     </g>
@@ -33,7 +33,7 @@
       <!-- Bar Top -->
       <line ng-show="settings.type === 'bar' && settings.hovering.y >= 0" ng-attr-x1="{{abc.hoveringBarOffset().x1}}" ng-attr-y1="{{abc.hoveringBarOffset().y1}}" ng-attr-x2="{{abc.hoveringBarOffset().x2}}" ng-attr-y2="{{abc.hoveringBarOffset().y2}}" stroke-width="2" stroke="black"></line>
       <!-- Zero Line -->
-      <line ng-show="abc.calculatePointYValue(0) >= 0 && abc.calculatePointYValue(0) <= abc.chartOffset().height" x1="0" ng-attr-y1="{{abc.calculatePointYValue(0)}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePointYValue(0)}}" stroke-width="2" stroke-opacity="0.5" stroke="black"></line>
+      <line ng-show="abc.showZeroLine()" x1="0" ng-attr-y1="{{abc.calculatePointYValue(0)}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePointYValue(0)}}" stroke-width="2" stroke-opacity="0.5" stroke="black"></line>
       <!-- Horizontal Line -->
       <line ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" x1="0" ng-attr-y1="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" stroke-width="1" stroke-opacity="0.5" stroke="black"></line>
       <!-- Vertical Line -->

@@ -55,6 +55,8 @@ app.directive('abc', [function () {
 
 app.controller('abcController', ['$scope', '$element', '$window', function ($scope, $element, $window) {
 
+  // Chart class
+  $scope.input.class = $scope.input.class || 'abc-chart';
   // Default title
   $scope.input.title = $scope.input.title || {};
   $scope.input.title.content = $scope.input.title.content || 'A Chart';
@@ -73,6 +75,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
   $scope.input.pointWidth = $scope.input.pointWidth || 2.5;
   $scope.input.pointHoverWidth = $scope.input.pointHoverWidth || 4;
+  $scope.input.axisTickWidth = $scope.input.axisTickSize || 1;
   $scope.input.axisTickSize = $scope.input.axisTickSize || 4;
   // Default unit
   $scope.input.unit = $scope.input.unit || {};
@@ -169,6 +172,9 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[0].length-1);
       }
       return 0;
+    },
+    showZeroLine: function () {
+      return ($scope.abc.calculatePointYValue(0) >= 0 && $scope.abc.calculatePointYValue(0) <= $scope.abc.chartOffset().height);
     },
     getTextLength: function (search) {
       var text = $element.find(search);
