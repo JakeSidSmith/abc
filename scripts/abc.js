@@ -191,6 +191,10 @@ app.directive('abc', [function () {
               }
             });
           });
+          if (lowest === highest) {
+            lowest -= 1;
+            highest += 1;
+          }
           return {
             lowest: lowest,
             highest: highest
