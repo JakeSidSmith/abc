@@ -57,6 +57,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
 
   // Chart class
   $scope.input.class = $scope.input.class || 'abc-chart';
+  $scope.input.focusClass = $scope.input.focusClass || 'abc-focus';
+  $scope.input.nofocusClass = $scope.input.nofocusClass || 'abc-nofocus';
   // Default title
   $scope.input.title = $scope.input.title || {};
   $scope.input.title.content = $scope.input.title.content || 'A Chart';
@@ -73,10 +75,10 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   // Default chart element sizes
   $scope.input.lineWidth = $scope.input.lineWidth || 2;
   $scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
-  $scope.input.pointWidth = $scope.input.pointWidth || 2.5;
-  $scope.input.pointHoverWidth = $scope.input.pointHoverWidth || 4;
   $scope.input.axisTickWidth = $scope.input.axisTickSize || 1;
   $scope.input.axisTickSize = $scope.input.axisTickSize || 4;
+  $scope.input.pointSize = $scope.input.pointSize || 2.5;
+  $scope.input.pointHoverSize = $scope.input.pointHoverSize || 4;
   // Default unit
   $scope.input.unit = $scope.input.unit || {};
   $scope.input.unit.type = $scope.input.unit.type || '%';
@@ -225,9 +227,9 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     pointRadius: function (indexP, index)  {
       if ($scope.settings.hovering.y < 0) {
-        return $scope.settings.hovering.x === index ? $scope.settings.pointHoverWidth : $scope.settings.pointWidth;
+        return $scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize;
       }
-      return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverWidth : $scope.settings.pointWidth;
+      return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize;
     },
     popupLegendX: function () {
       var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
@@ -293,7 +295,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         var final = (index === 0 ? 'M' : '') + $scope.abc.calculatePoint(indexP, index).x + ' ' + $scope.abc.calculatePoint(indexP, index).y;
         if (index < $scope.settings.data[indexP].length-1) {
           final += ' C ' + $scope.abc.calculatePointXValue(index + 0.3) + ' ' + $scope.abc.calculatePoint(indexP, index).y +
-            ' ' + $scope.abc.calculatePointXValue(index + 0.7) + ' ' + $scope.abc.calculatePoint(indexP, index+1).y;
+          ' ' + $scope.abc.calculatePointXValue(index + 0.7) + ' ' + $scope.abc.calculatePoint(indexP, index+1).y;
         }
         return final;
       }).join(' ');
@@ -353,7 +355,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     hoveringClass: function (index) {
       if ($scope.settings.hovering.y >= 0) {
-        return index !== $scope.settings.hovering.y ? 'not-hovering' : '';
+        return index !== $scope.settings.hovering.y ? $scope.input.nofocusClass : $scope.input.focusClass;
       }
       return '';
     }
