@@ -140,9 +140,9 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     chartOffset: function () {
       return {
-        x: $scope.settings.margin,
+        x: $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText(),
         y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-        width: Math.max($scope.settings.width - $scope.settings.margin*2, 0),
+        width: Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0),
         height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
       };
     },
@@ -171,7 +171,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     verticalLineOffset: function () {
       if ($scope.settings.hovering.y < 0 && $scope.settings.hovering.x >= 0) {
-        return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[0].length-1);
+        return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText()) / ($scope.settings.data[0].length-1);
       }
       return 0;
     },
@@ -358,6 +358,90 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         return index !== $scope.settings.hovering.y ? $scope.input.nofocusClass : $scope.input.focusClass;
       }
       return '';
+    },
+    powerToDecimal: function (value) {
+      value = Math.abs(value);
+      var powerIndex = 0;
+
+      if (value > 1) {
+        while (value > 1) {
+          value /= 10;
+          powerIndex += 1;
+        }
+        return Math.pow(10, powerIndex);
+      }
+      while (value < 1) {
+        value *= 10;
+        powerIndex += 1;
+      }
+      return Math.pow(10, powerIndex - 1);
+    },
+    customRounding: function (value) {
+      //value = Math.round(value);
+      var roundings = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.75, 1];
+
+      for (var i = 0; i < roundings.length; i += 1) {
+        if (value <= roundings[i]) {
+          return roundings[i];
+        }
+      }
+      return 1;
+    },
+    yTickTotal: function () {
+      return Math.floor($scope.abc.chartOffset().height / ($scope.settings.headers.size * 2));
+    },
+    yTickList: function () {
+      var list = [];
+      var total = $scope.abc.yTickTotal();
+      for (var i = 0; i < total; i += 1) {
+        list.push(i);
+      }
+      return list;
+    },
+    yTickRoughOffset: function () {
+      return $scope.abc.highLowDif() / $scope.abc.yTickTotal();
+    },
+    yTickInterval: function () {
+      var roughOffset = $scope.abc.yTickRoughOffset();
+      var power = $scope.abc.powerToDecimal(roughOffset);
+
+      if (roughOffset > 1) {
+        roughOffset /= power;
+        roughOffset = $scope.abc.customRounding(roughOffset);
+        roughOffset *= power;
+        return roughOffset;
+      }
+      roughOffset *= power;
+      roughOffset = $scope.abc.customRounding(roughOffset);
+      roughOffset /= power;
+      return roughOffset;
+    },
+    yLowestTickIndex: function () {
+      return Math.floor($scope.abc.highLow().lowest / $scope.abc.yTickInterval());
+    },
+    yTickValue: function (index) {
+      return (index + $scope.abc.yLowestTickIndex()) * $scope.abc.yTickInterval();
+    },
+    yTickOffset: function (index) {
+      return $scope.abc.calculatePointYValue( $scope.abc.yTickValue(index) );
+    },
+    yTickTextLength: function (index) {
+      var text = $element.find('.abc-y-labels');
+      return text[index].getComputedTextLength();
+    },
+    yLongestTickText: function () {
+      var texts = $element.find('.abc-y-labels');
+      var longestFound = false;
+      var longest = 0;
+
+      for (var i = 0; i < texts.length; i += 1) {
+        var textLength = texts[i].getComputedTextLength();
+        if (!longestFound || textLength > longest) {
+          longest = textLength;
+          longestFound = true;
+        }
+      }
+      return longest;
     }
   };
 
