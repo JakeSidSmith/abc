@@ -37,7 +37,7 @@
       <!-- Horizontal Line -->
       <line ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" x1="0" ng-attr-y1="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y}}" stroke-width="1" stroke-opacity="0.5" stroke="black"></line>
       <!-- Vertical Line -->
-      <line ng-show="settings.hovering.y < 0 && settings.hovering.x >= 0" ng-attr-x1="{{abc.verticalLineOffset()}}" y1="0" ng-attr-x2="{{abc.verticalLineOffset()}}" ng-attr-y2="{{abc.chartOffset().height}}" stroke-width="1" stroke-opacity="0.5" stroke="black"></line>
+      <line ng-show="settings.type !== 'bar' && settings.hovering.y < 0 && settings.hovering.x >= 0" ng-attr-x1="{{abc.verticalLineOffset()}}" y1="0" ng-attr-x2="{{abc.verticalLineOffset()}}" ng-attr-y2="{{abc.chartOffset().height}}" stroke-width="1" stroke-opacity="0.5" stroke="black"></line>
       <!-- Hovering Areas -->
       <rect ng-show="settings.type !== 'bar'" ng-repeat="line in settings.data[0]" ng-attr-x="{{abc.hoverAreaOffset($index).x}}" y="0" ng-attr-width="{{abc.hoverAreaOffset().width}}" ng-attr-height="{{abc.chartOffset().height}}" ng-mouseover="abc.setHovering(undefined, $index)" ng-mouseout="abc.setHovering()" fill="rgba(0, 0, 0, 0)"></rect>
       <!-- Hovering Areas for Bar -->
