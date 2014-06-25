@@ -53,7 +53,7 @@ app.directive('abc', [function () {
 
 }]);
 
-app.controller('abcController', ['$scope', '$element', '$window', '$compile', function ($scope, $element, $window, $compile) {
+app.controller('abcController', ['$scope', '$element', '$window', function ($scope, $element, $window) {
 
   // Chart class
   $scope.input.class = $scope.input.class || 'abc-chart';
@@ -107,7 +107,7 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
 
   $scope.getElementDimensions = function () {
-    return { 'h': $element.height(), 'w': $element.width() };
+    return { 'width': $element.width(), 'height': $element.height() };
   };
 
   $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
@@ -125,46 +125,6 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
 
   $scope.settings = $scope.input;
 
-  $scope.abcChartElement = $element.find('#abc-chart-element');
-
-  $scope.abcTemplates = {};
-
-  // Line template
-  $scope.abcTemplates.line = $compile(
-    '<svg><g id="abc-lines" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
-    '<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getPoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></polyline>' +
-    '</g></svg>'
-  )($scope);
-
-  // Area template
-  $scope.abcTemplates.area = $compile(
-    '<svg><g id="abc-areas" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
-    '<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getAreaPoints($index)}}" fill-opacity="0.3" ng-attr-stroke-width="{{settings.lineWidth}}"></polyline>' +
-    '</g></svg>'
-  )($scope);
-
-  // Spline template
-  $scope.abcTemplates.spline = $compile(
-    '<svg><g id="abc-splines" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
-    '<path ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-d="{{abc.getSplinePoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></path>' +
-    '</g></svg>'
-  )($scope);
-
-  // Bar template
-  $scope.abcTemplates.bar = $compile(
-    '<svg><g id="abc-bars" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">' +
-    '<rect ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}"></rect>' +
-    '</g></svg>'
-  )($scope);
-
-  $scope.abcChartElement.html($scope.abcTemplates.line);
-
-  $scope.$watch('settings.type', function (value) {
-    if (value) {
-      $scope.abcChartElement.html($scope.abcTemplates[value]);
-    }
-  });
-
   $scope.abc = {
     mouseOffset: {
       x: 0,
@@ -178,13 +138,11 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       $scope.settings.hovering.y = indexP !== undefined ? indexP : -1;
       $scope.settings.hovering.x = index !== undefined ? index : -1;
     },
-    chartOffset: function () {
-      return {
-        x: $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText(),
-        y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-        width: Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0),
-        height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
-      };
+    chartOffset: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0
     },
     axisOffset: function () {
       return {
@@ -216,7 +174,7 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       return 0;
     },
     showZeroLine: function () {
-      return ($scope.abc.calculatePointYValue(0) >= 0 && $scope.abc.calculatePointYValue(0) <= $scope.abc.chartOffset().height);
+      return ($scope.abc.calculatePointYValue(0) >= 0 && $scope.abc.calculatePointYValue(0) <= $scope.abc.chartOffset.height);
     },
     getTextLength: function (search) {
       var text = $element.find(search);
@@ -272,7 +230,7 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize;
     },
     popupLegendX: function () {
-      var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+      var maxOffset = $scope.abc.chartOffset.width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
       var rightOffset = 0;
       if ($scope.settings.type === 'bar') {
         rightOffset = $scope.abc.hoveringBarOffset().x2 + 10;
@@ -297,11 +255,11 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       return $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
     },
     calculatePointYValue: function (value) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-      return $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowDif();
+      return $scope.abc.chartOffset.height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
     },
     calculatePointXValue: function (index) {
-      return $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * index;
+      return $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * index;
     },
     calculatePoint: function (indexP, index) {
       var x, y;
@@ -326,8 +284,8 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       var points = $scope.settings.data[indexP].map(function (item, index) {
         return $scope.abc.calculatePoint(indexP, index).x + ',' + $scope.abc.calculatePoint(indexP, index).y;
       });
-      points.unshift('0,' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
-      points.push($scope.abc.chartOffset().width + ',' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
+      points.unshift('0,' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset.height), 0));
+      points.push($scope.abc.chartOffset.width + ',' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset.height), 0));
       return points.join(',');
     },
     getSplinePoints: function (indexP) {
@@ -341,17 +299,17 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       }).join(' ');
     },
     calculateBarWidth: function () {
-      return $scope.abc.chartOffset().width / $scope.settings.data.length / $scope.settings.data[0].length;
+      return $scope.abc.chartOffset.width / $scope.settings.data.length / $scope.settings.data[0].length;
     },
     calculateBarY: function (value) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
-      return $scope.abc.chartOffset().height - value * multiplier + Math.min($scope.abc.highLow().lowest, 0) * multiplier;
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
+      return $scope.abc.chartOffset.height - value * multiplier + Math.min($scope.abc.highLow().lowest, 0) * multiplier;
     },
     calculateBarX: function (indexP, index) {
-      return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
+      return index * $scope.abc.chartOffset.width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset.width / $scope.settings.data[0].length / $scope.settings.data.length;
     },
     barOffset: function (indexP, index) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
       if ($scope.settings.data[indexP][index].value <= 0) {
         return {
           x: $scope.abc.calculateBarX(indexP, index),
@@ -369,8 +327,8 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
     },
     hoverAreaOffset: function (index) {
       return {
-        x: $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
-        width: Math.max($scope.abc.chartOffset().width / ($scope.settings.data[0].length-1), 0)
+        x: $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
+        width: Math.max($scope.abc.chartOffset.width / ($scope.settings.data[0].length-1), 0)
       };
     },
     hoveringBarOffset: function () {
@@ -428,7 +386,7 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       return 1;
     },
     yTickTotal: function () {
-      return Math.floor($scope.abc.chartOffset().height / ($scope.settings.headers.size * 2));
+      return Math.floor($scope.abc.chartOffset.height / ($scope.settings.headers.size * 2));
     },
     yTickList: function () {
       var list = [];
@@ -483,6 +441,13 @@ app.controller('abcController', ['$scope', '$element', '$window', '$compile', fu
       }
       return longest;
     }
+  };
+
+  $scope.abc.chartOffset = {
+    x: $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText(),
+    y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
+    width: Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0),
+    height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
   };
 
 }]);
