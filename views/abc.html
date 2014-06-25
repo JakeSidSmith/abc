@@ -1,22 +1,31 @@
 <svg ng-class="settings.class" ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" ng-mousemove="abc.setMouseOffset($event)" >
     <!-- Title -->
     <text id="abc-title" ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
+    <g id="abc-chart-element"></g>
     <!-- Line -->
+    <!--
     <g id="abc-lines" ng-show="settings.type === 'line'" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
         <polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getPoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></polyline>
     </g>
+    -->
     <!-- Area -->
+    <!--
     <g id="abc-areas" ng-show="settings.type === 'area'" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
         <polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getAreaPoints($index)}}" fill-opacity="0.3" ng-attr-stroke-width="{{settings.lineWidth}}"></polyline>
     </g>
+    -->
     <!-- Spline -->
+    <!--
     <g id="abc-splines" ng-show="settings.type === 'spline'" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
         <path ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-d="{{abc.getSplinePoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></path>
     </g>
+    -->
     <!-- Bar -->
+    <!--
     <g id="abc-bars" ng-show="settings.type === 'bar'" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
         <rect ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}"></rect>
     </g>
+    -->
     <!-- Axis -->
     <g id="abc-axis" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">
       <!-- Y Axis -->
@@ -24,7 +33,9 @@
       <!-- Y Axis Ticks -->
       <line ng-hide="abc.yTickOffset($index) < 0 || abc.yTickOffset($index) > abc.chartOffset().height" ng-repeat="tick in abc.yTickList()" ng-attr-x1="{{0 - settings.axisTickSize}}" ng-attr-y1="{{abc.yTickOffset($index)}}" x2="0" ng-attr-y2="{{abc.yTickOffset($index)}}" stroke="black" ng-attr-stroke-width="{{settings.axisTickWidth}}"></line>
       <!-- Y Axis Labels -->
+      <!--
       <text ng-hide="abc.yTickOffset($index) < 0 || abc.yTickOffset($index) > abc.chartOffset().height" class="abc-y-labels" ng-repeat="tick in abc.yTickList()" ng-attr-x="{{0 - settings.axisTickSize*1.5 - abc.yTickTextLength($index)}}" ng-attr-y="{{abc.yTickOffset($index) + settings.headers.size / 2.5}}" text-anchor="right" ng-bind="abc.yTickValue($index)" ng-attr-font-size="{{settings.headers.size}}"></text>
+      -->
       <!-- X Axis -->
       <line ng-attr-stroke-width="{{settings.axisLineWidth}}" stroke="black" x1="0" ng-attr-y1="{{abc.chartOffset().height}}" ng-attr-x2="{{abc.chartOffset().width}}" ng-attr-y2="{{abc.chartOffset().height}}"></line>
       <!-- X Axis Ticks -->
