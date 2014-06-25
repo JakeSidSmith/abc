@@ -53,7 +53,7 @@ app.directive('abc', [function () {
 
 }]);
 
-app.controller('abcController', ['$scope', '$element', '$window', function ($scope, $element, $window) {
+app.controller('abcController', ['$scope', '$element', '$window', '$compile', function ($scope, $element, $window, $compile) {
 
   // Chart class
   $scope.input.class = $scope.input.class || 'abc-chart';
@@ -124,6 +124,46 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   }
 
   $scope.settings = $scope.input;
+
+  $scope.abcChartElement = $element.find('#abc-chart-element');
+
+  $scope.abcTemplates = {};
+
+  // Line template
+  $scope.abcTemplates.line = $compile(
+    '<svg><g id="abc-lines" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
+    '<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getPoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></polyline>' +
+    '</g></svg>'
+  )($scope);
+
+  // Area template
+  $scope.abcTemplates.area = $compile(
+    '<svg><g id="abc-areas" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
+    '<polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getAreaPoints($index)}}" fill-opacity="0.3" ng-attr-stroke-width="{{settings.lineWidth}}"></polyline>' +
+    '</g></svg>'
+  )($scope);
+
+  // Spline template
+  $scope.abcTemplates.spline = $compile(
+    '<svg><g id="abc-splines" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})">' +
+    '<path ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-d="{{abc.getSplinePoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></path>' +
+    '</g></svg>'
+  )($scope);
+
+  // Bar template
+  $scope.abcTemplates.bar = $compile(
+    '<svg><g id="abc-bars" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset().x}}, {{abc.chartOffset().y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">' +
+    '<rect ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}"></rect>' +
+    '</g></svg>'
+  )($scope);
+
+  $scope.abcChartElement.html($scope.abcTemplates.line);
+
+  $scope.$watch('settings.type', function (value) {
+    if (value) {
+      $scope.abcChartElement.html($scope.abcTemplates[value]);
+    }
+  });
 
   $scope.abc = {
     mouseOffset: {
