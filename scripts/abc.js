@@ -106,24 +106,106 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
 
+  $scope.settings = $scope.input;
+
+  var updateChartOffset = {
+    x: function () {
+      $scope.abc.chartOffset.x = $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText();
+    },
+    y: function () {
+      $scope.abc.chartOffset.y = $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin;
+    },
+    width: function () {
+      $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
+    },
+    height: function () {
+      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
+    }
+  };
+
+  var updateYTicks = function () {
+    // Update total
+    $scope.abc.yTickTotal = Math.max(Math.ceil(Math.max($scope.abc.chartOffset.height, 0) / ($scope.settings.headers.size * 2)), 1);
+
+    // Rough offset
+    var roughOffset = Math.max($scope.abc.highLowDif() / $scope.abc.yTickTotal, 0);
+
+    // Update list
+    var list = [];
+    for (var i = 0; i < $scope.abc.yTickTotal; i += 1) {
+      list.push(i);
+    }
+    $scope.abc.yTickList = list;
+
+    // Update interval
+    var power = $scope.abc.powerToDecimal(roughOffset);
+
+
+    if (roughOffset > 1) {
+      roughOffset /= power;
+      roughOffset = $scope.abc.customRounding(roughOffset);
+      roughOffset *= power;
+      $scope.abc.yTickInterval = Math.max(roughOffset, 0);
+    } else {
+      roughOffset *= power;
+      roughOffset = $scope.abc.customRounding(roughOffset);
+      roughOffset /= power;
+      $scope.abc.yTickInterval = Math.max(roughOffset, 0);
+    }
+  };
+
+  var chartWidthUpdate = function (newValue, oldValue) {
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateChartOffset.x();
+      updateChartOffset.width();
+    }
+  };
+
+  var chartHeightUpdate = function (newValue, oldValue) {
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateChartOffset.y();
+      updateChartOffset.height();
+      updateYTicks();
+    }
+  };
+
+  var highLowUpdate = function (newValue, oldValue) {
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateYTicks();
+    }
+  };
+
+  $scope.$watch('settings.width', chartWidthUpdate);
+  $scope.$watch('settings.margin', chartWidthUpdate);
+  $scope.$watch('settings.axisTickSize', chartWidthUpdate);
+  $scope.$watch('settings.axisTickSize', chartWidthUpdate);
+  $scope.$watch('abc.yTickInterval', chartWidthUpdate);
+
+  $scope.$watch('settings.height', chartHeightUpdate);
+  $scope.$watch('settings.axisTickSize', chartHeightUpdate);
+  $scope.$watch('settings.margin', chartHeightUpdate);
+  $scope.$watch('settings.title.size', chartHeightUpdate);
+  $scope.$watch('settings.title.margin', chartHeightUpdate);
+  $scope.$watch('settings.headers.size', chartHeightUpdate);
+
+  $scope.$watch('abc.highLow()', highLowUpdate, true);
+
   $scope.getElementDimensions = function () {
-    return { 'h': $element.height(), 'w': $element.width() };
+    return { 'width': $element.width(), 'height': $element.height() };
   };
 
   $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
     if (oldValue !== newValue) {
-      $scope.input.width = $element.width();
-      $scope.input.height = $element.height();
+      $scope.settings.width = $element.width();
+      $scope.settings.height = $element.height();
     }
   }, true);
 
-  if ($scope.input.resize.width || $scope.input.resize.height){
+  if ($scope.settings.resize.width || $scope.settings.resize.height){
     angular.element($window).bind('resize', function () {
       $scope.$apply();
     });
   }
-
-  $scope.settings = $scope.input;
 
   $scope.abc = {
     mouseOffset: {
@@ -138,13 +220,11 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       $scope.settings.hovering.y = indexP !== undefined ? indexP : -1;
       $scope.settings.hovering.x = index !== undefined ? index : -1;
     },
-    chartOffset: function () {
-      return {
-        x: $scope.settings.margin,
-        y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-        width: Math.max($scope.settings.width - $scope.settings.margin*2, 0),
-        height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
-      };
+    chartOffset: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0
     },
     axisOffset: function () {
       return {
@@ -171,12 +251,12 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     verticalLineOffset: function () {
       if ($scope.settings.hovering.y < 0 && $scope.settings.hovering.x >= 0) {
-        return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2) / ($scope.settings.data[0].length-1);
+        return $scope.settings.hovering.x * $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1);
       }
       return 0;
     },
     showZeroLine: function () {
-      return ($scope.abc.calculatePointYValue(0) >= 0 && $scope.abc.calculatePointYValue(0) <= $scope.abc.chartOffset().height);
+      return ($scope.abc.calculatePointYValue(0) >= 0 && $scope.abc.calculatePointYValue(0) <= $scope.abc.chartOffset.height);
     },
     getTextLength: function (search) {
       var text = $element.find(search);
@@ -232,7 +312,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return $scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize;
     },
     popupLegendX: function () {
-      var maxOffset = $scope.abc.chartOffset().width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+      var maxOffset = $scope.abc.chartOffset.width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
       var rightOffset = 0;
       if ($scope.settings.type === 'bar') {
         rightOffset = $scope.abc.hoveringBarOffset().x2 + 10;
@@ -257,11 +337,11 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
     },
     calculatePointYValue: function (value) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowDif();
-      return $scope.abc.chartOffset().height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowDif();
+      return $scope.abc.chartOffset.height + $scope.abc.highLow().lowest * multiplier - value * multiplier;
     },
     calculatePointXValue: function (index) {
-      return $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * index;
+      return $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * index;
     },
     calculatePoint: function (indexP, index) {
       var x, y;
@@ -286,8 +366,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       var points = $scope.settings.data[indexP].map(function (item, index) {
         return $scope.abc.calculatePoint(indexP, index).x + ',' + $scope.abc.calculatePoint(indexP, index).y;
       });
-      points.unshift('0,' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
-      points.push($scope.abc.chartOffset().width + ',' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset().height), 0));
+      points.unshift('0,' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset.height), 0));
+      points.push($scope.abc.chartOffset.width + ',' + Math.max(Math.min($scope.abc.calculatePointYValue(0), $scope.abc.chartOffset.height), 0));
       return points.join(',');
     },
     getSplinePoints: function (indexP) {
@@ -301,17 +381,17 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       }).join(' ');
     },
     calculateBarWidth: function () {
-      return $scope.abc.chartOffset().width / $scope.settings.data.length / $scope.settings.data[0].length;
+      return $scope.abc.chartOffset.width / $scope.settings.data.length / $scope.settings.data[0].length;
     },
     calculateBarY: function (value) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
-      return $scope.abc.chartOffset().height - value * multiplier + Math.min($scope.abc.highLow().lowest, 0) * multiplier;
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
+      return $scope.abc.chartOffset.height - value * multiplier + Math.min($scope.abc.highLow().lowest, 0) * multiplier;
     },
     calculateBarX: function (indexP, index) {
-      return index * $scope.abc.chartOffset().width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset().width / $scope.settings.data[0].length / $scope.settings.data.length;
+      return index * $scope.abc.chartOffset.width / $scope.settings.data[0].length + indexP * $scope.abc.chartOffset.width / $scope.settings.data[0].length / $scope.settings.data.length;
     },
     barOffset: function (indexP, index) {
-      var multiplier = $scope.abc.chartOffset().height / $scope.abc.highLowBarDif();
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
       if ($scope.settings.data[indexP][index].value <= 0) {
         return {
           x: $scope.abc.calculateBarX(indexP, index),
@@ -329,8 +409,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     hoverAreaOffset: function (index) {
       return {
-        x: $scope.abc.chartOffset().width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
-        width: Math.max($scope.abc.chartOffset().width / ($scope.settings.data[0].length-1), 0)
+        x: $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
+        width: Math.max($scope.abc.chartOffset.width / ($scope.settings.data[0].length-1), 0)
       };
     },
     hoveringBarOffset: function () {
@@ -358,7 +438,87 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         return index !== $scope.settings.hovering.y ? $scope.input.nofocusClass : $scope.input.focusClass;
       }
       return '';
+    },
+    powerToDecimal: function (value) {
+      value = Math.abs(value);
+      if (value === 0) {
+        value = 0.1;
+      }
+      var powerIndex = 0;
+
+      if (value > 1) {
+        while (value > 1) {
+          value /= 10;
+          powerIndex += 1;
+        }
+        return Math.pow(10, powerIndex);
+      }
+      while (value < 1) {
+        value *= 10;
+        powerIndex += 1;
+      }
+      return Math.pow(10, powerIndex - 1);
+    },
+    customRounding: function (value) {
+      //value = Math.round(value);
+      var roundings = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.75, 1];
+
+      for (var i = 0; i < roundings.length; i += 1) {
+        if (value <= roundings[i]) {
+          return roundings[i];
+        }
+      }
+      return 1;
+    },
+    yTickTotal: 0,
+    yTickList: [],
+    yTickInterval: 0,
+    yLowestTickIndex: function () {
+      return Math.ceil($scope.abc.highLow().lowest / $scope.abc.yTickInterval);
+    },
+    yTickValue: function (index) {
+      return (index + $scope.abc.yLowestTickIndex()) * $scope.abc.yTickInterval;
+    },
+    readableYTickValue: function (index) {
+      var value = $scope.abc.yTickValue(index);
+
+      if (value < 0.1 && value > -0.1) {
+        if (value === 0) {
+          return 0;
+        }
+        var power = $scope.abc.powerToDecimal(value);
+        return value.toFixed(power.toString().length);
+      }
+      return value.toFixed(2);
+    },
+    yTickOffset: function (index) {
+      return $scope.abc.calculatePointYValue( $scope.abc.yTickValue(index) );
+    },
+    yTickTextLength: function (index) {
+      var text = $element.find('.abc-y-labels');
+      return text[index].getComputedTextLength();
+    },
+    yLongestTickText: function () {
+      var texts = $element.find('.abc-y-labels');
+      var longestFound = false;
+      var longest = 0;
+
+      for (var i = 0; i < texts.length; i += 1) {
+        var textLength = texts[i].getComputedTextLength();
+        if (!longestFound || textLength > longest) {
+          longest = textLength;
+          longestFound = true;
+        }
+      }
+      return longest;
     }
   };
+
+  // Set initial chart values
+  updateChartOffset.x();
+  updateChartOffset.y();
+  updateChartOffset.width();
+  updateChartOffset.height();
+  updateYTicks();
 
 }]);
