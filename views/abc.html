@@ -8,9 +8,9 @@
       <!-- Y Axis -->
       <line ng-attr-stroke-width="{{settings.axisLineWidth}}" stroke="black" x1="0" y1="0" x2="0" ng-attr-y2="{{abc.chartOffset.height}}"></line>
       <!-- Y Axis Ticks -->
-      <line ng-hide="abc.yTickOffset($index) <= 0 || abc.yTickOffset($index) >= abc.chartOffset.height" ng-repeat="tick in abc.yTickList()" ng-attr-x1="{{0 - settings.axisTickSize}}" ng-attr-y1="{{abc.yTickOffset($index)}}" x2="0" ng-attr-y2="{{abc.yTickOffset($index)}}" stroke="black" ng-attr-stroke-width="{{settings.axisTickWidth}}"></line>
+      <line ng-hide="abc.yTickOffset($index) < 0 || abc.yTickOffset($index) > abc.chartOffset.height" ng-repeat="tick in abc.yTickList" ng-attr-x1="{{0 - settings.axisTickSize}}" ng-attr-y1="{{abc.yTickOffset($index)}}" x2="0" ng-attr-y2="{{abc.yTickOffset($index)}}" stroke="black" ng-attr-stroke-width="{{settings.axisTickWidth}}"></line>
       <!-- Y Axis Labels -->
-      <text ng-hide="abc.yTickOffset($index) <= 0 || abc.yTickOffset($index) >= abc.chartOffset.height" class="abc-y-labels" ng-repeat="tick in abc.yTickList()" ng-attr-x="{{0 - settings.axisTickSize*1.5 - abc.yTickTextLength($index)}}" ng-attr-y="{{abc.yTickOffset($index) + settings.headers.size / 2.5}}" text-anchor="right" ng-bind="abc.yTickValue($index)" ng-attr-font-size="{{settings.headers.size}}"></text>
+      <text ng-hide="abc.yTickOffset($index) < 0 || abc.yTickOffset($index) > abc.chartOffset.height" class="abc-y-labels" ng-repeat="tick in abc.yTickList" ng-attr-x="{{0 - settings.axisTickSize*1.5 - abc.yTickTextLength($index)}}" ng-attr-y="{{abc.yTickOffset($index) + settings.headers.size / 2.5}}" text-anchor="right" ng-bind="abc.yTickValue($index)" ng-attr-font-size="{{settings.headers.size}}"></text>
       <!-- X Axis -->
       <line ng-attr-stroke-width="{{settings.axisLineWidth}}" stroke="black" x1="0" ng-attr-y1="{{abc.chartOffset.height}}" ng-attr-x2="{{abc.chartOffset.width}}" ng-attr-y2="{{abc.chartOffset.height}}"></line>
       <!-- X Axis Ticks -->
