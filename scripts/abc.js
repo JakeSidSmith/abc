@@ -106,32 +106,17 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
 
-  $scope.getElementDimensions = function () {
-    return { 'width': $element.width(), 'height': $element.height() };
-  };
+  $scope.settings = $scope.input;
 
-  $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
-    if (oldValue !== newValue) {
-      $scope.input.width = $element.width();
-      $scope.input.height = $element.height();
-    }
-  }, true);
-
-  if ($scope.input.resize.width || $scope.input.resize.height){
-    angular.element($window).bind('resize', function () {
-      $scope.$apply();
-    });
-  }
-
-  var updateChartWidth = function (newVal, oldVal) {
-    if (newVal !== oldVal) {
+  var updateChartWidth = function (newValue, oldValue) {
+    if (newValue !== oldValue) {
       $scope.abc.chartOffset.x = $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText();
       $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
     }
   };
 
-  var updateChartHeight = function (newVal, oldVal) {
-    if (newVal !== oldVal) {
+  var updateChartHeight = function (newValue, oldValue) {
+    if (newValue !== oldValue) {
       $scope.abc.chartOffset.y = $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin;
       $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
     }
@@ -148,7 +133,22 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.$watch('settings.title.margin', updateChartHeight);
   $scope.$watch('settings.headers.size', updateChartHeight);
 
-  $scope.settings = $scope.input;
+  $scope.getElementDimensions = function () {
+    return { 'width': $element.width(), 'height': $element.height() };
+  };
+
+  $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
+    if (oldValue !== newValue) {
+      $scope.settings.width = $element.width();
+      $scope.settings.height = $element.height();
+    }
+  }, true);
+
+  if ($scope.settings.resize.width || $scope.settings.resize.height){
+    angular.element($window).bind('resize', function () {
+      $scope.$apply();
+    });
+  }
 
   $scope.abc = {
     mouseOffset: {
@@ -411,7 +411,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return 1;
     },
     yTickTotal: function () {
-      return Math.floor($scope.abc.chartOffset.height / ($scope.settings.headers.size * 2));
+      return Math.ceil($scope.abc.chartOffset.height / ($scope.settings.headers.size * 2));
     },
     yTickList: function () {
       var list = [];
@@ -440,7 +440,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return roughOffset;
     },
     yLowestTickIndex: function () {
-      return Math.floor($scope.abc.highLow().lowest / $scope.abc.yTickInterval());
+      return Math.ceil($scope.abc.highLow().lowest / $scope.abc.yTickInterval());
     },
     yTickValue: function (index) {
       return (index + $scope.abc.yLowestTickIndex()) * $scope.abc.yTickInterval();
