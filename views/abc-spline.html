@@ -1,0 +1,5 @@
+<svg>
+    <g id="abc-splines" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
+        <path ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-d="{{abc.getSplinePoints($index)}}" ng-attr-stroke-width="{{settings.lineWidth}}" fill="none"></path>
+    </g>
+</svg>
