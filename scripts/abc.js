@@ -117,23 +117,36 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     }
   }, true);
 
-  $scope.$watch('settings.width', function (newVal, oldVal) {
-    if (newVal !== oldVal) {
-      $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
-    }
-  }, true);
-
-  $scope.$watch('settings.height', function (newVal, oldVal) {
-    if (newVal !== oldVal) {
-      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
-    }
-  }, true);
-
   if ($scope.input.resize.width || $scope.input.resize.height){
     angular.element($window).bind('resize', function () {
       $scope.$apply();
     });
   }
+
+  var updateChartWidth = function (newVal, oldVal) {
+    if (newVal !== oldVal) {
+      $scope.abc.chartOffset.x = $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText();
+      $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
+    }
+  };
+
+  var updateChartHeight = function (newVal, oldVal) {
+    if (newVal !== oldVal) {
+      $scope.abc.chartOffset.y = $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin;
+      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
+    }
+  };
+
+  $scope.$watch('settings.width', updateChartWidth);
+  $scope.$watch('settings.margin', updateChartWidth);
+  $scope.$watch('settings.axisTickSize', updateChartWidth);
+
+  $scope.$watch('settings.height', updateChartHeight);
+  $scope.$watch('settings.axisTickSize', updateChartHeight);
+  $scope.$watch('settings.margin', updateChartHeight);
+  $scope.$watch('settings.title.size', updateChartHeight);
+  $scope.$watch('settings.title.margin', updateChartHeight);
+  $scope.$watch('settings.headers.size', updateChartHeight);
 
   $scope.settings = $scope.input;
 
