@@ -441,6 +441,9 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     powerToDecimal: function (value) {
       value = Math.abs(value);
+      if (value === 0) {
+        value = 0.1;
+      }
       var powerIndex = 0;
 
       if (value > 1) {
@@ -475,6 +478,18 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     yTickValue: function (index) {
       return (index + $scope.abc.yLowestTickIndex()) * $scope.abc.yTickInterval;
+    },
+    readableYTickValue: function (index) {
+      var value = $scope.abc.yTickValue(index);
+
+      if (value < 0.1 && value > -0.1) {
+        if (value === 0) {
+          return 0;
+        }
+        var power = $scope.abc.powerToDecimal(value);
+        return value.toFixed(power.toString().length);
+      }
+      return value.toFixed(2);
     },
     yTickOffset: function (index) {
       return $scope.abc.calculatePointYValue( $scope.abc.yTickValue(index) );
