@@ -173,7 +173,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     if (oldValue === undefined || newValue !== oldValue) {
       updateYTicks();
     }
-  }
+  };
 
   $scope.$watch('settings.width', chartWidthUpdate);
   $scope.$watch('settings.margin', chartWidthUpdate);
