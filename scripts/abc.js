@@ -180,6 +180,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.$watch('settings.title.margin', chartHeightUpdate);
   $scope.$watch('settings.headers.size', chartHeightUpdate);
 
+  $scope.$watch('abc.highLow()', updateYTicks, true);
+
   $scope.getElementDimensions = function () {
     return { 'width': $element.width(), 'height': $element.height() };
   };
