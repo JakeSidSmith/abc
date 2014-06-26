@@ -169,9 +169,17 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     }
   };
 
+  var highLowUpdate = function (newValue, oldValue) {
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateYTicks();
+    }
+  }
+
   $scope.$watch('settings.width', chartWidthUpdate);
   $scope.$watch('settings.margin', chartWidthUpdate);
   $scope.$watch('settings.axisTickSize', chartWidthUpdate);
+  $scope.$watch('settings.axisTickSize', chartWidthUpdate);
+  $scope.$watch('abc.yTickInterval', chartWidthUpdate);
 
   $scope.$watch('settings.height', chartHeightUpdate);
   $scope.$watch('settings.axisTickSize', chartHeightUpdate);
@@ -180,7 +188,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.$watch('settings.title.margin', chartHeightUpdate);
   $scope.$watch('settings.headers.size', chartHeightUpdate);
 
-  $scope.$watch('abc.highLow()', updateYTicks, true);
+  $scope.$watch('abc.highLow()', highLowUpdate, true);
 
   $scope.getElementDimensions = function () {
     return { 'width': $element.width(), 'height': $element.height() };
