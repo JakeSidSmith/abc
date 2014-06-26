@@ -4,8 +4,11 @@
     <!-- Regions -->
     <g id="abc-regions" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
       <g ng-repeat="region in settings.regions">
-        <rect y="0" ng-attr-x="{{abc.regionOffset(region).x}}" ng-attr-width="{{abc.regionOffset(region).width}}" ng-attr-height="{{abc.chartOffset.height}}" ng-attr-fill="{{region.color}}" fill-opacity="0.2"></rect>
-        <text text-anchor="middle" ng-attr-x="{{abc.regionTitleOffset(region).x}}" ng-attr-y="{{abc.regionTitleOffset(region).y}}" ng-bind="region.title" ng-attr-fill="{{region.color}}" fill-opacity="0.5"></text>
+        <clipPath id="abc-region-clip-path-{{$index}}">
+          <rect y="0" ng-attr-x="{{abc.regionOffset(region).x}}" ng-attr-width="{{abc.regionOffset(region).width}}" ng-attr-height="{{abc.chartOffset.height}}"></rect>
+        </clipPath>
+        <rect id="abc-region-rectangle" y="0" ng-attr-x="{{abc.regionOffset(region).x}}" ng-attr-width="{{abc.regionOffset(region).width}}" ng-attr-height="{{abc.chartOffset.height}}" ng-attr-fill="{{region.color}}" fill-opacity="0.2"></rect>
+        <text clip-path="url(#abc-region-clip-path-{{$index}})" text-anchor="middle" ng-attr-x="{{abc.regionTitleOffset(region).x}}" ng-attr-y="{{abc.regionTitleOffset(region).y}}" ng-bind="region.title" ng-attr-font-size="{{region.size}}" ng-attr-fill="{{region.color}}" fill-opacity="0.5"></text>
       </g>
     </g>
     <!-- Main Chart Elements -->
