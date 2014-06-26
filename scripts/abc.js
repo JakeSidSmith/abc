@@ -108,17 +108,32 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
 
   $scope.settings = $scope.input;
 
-  var updateChartWidth = function (newValue, oldValue) {
-    if (newValue !== oldValue) {
+  var updateChartOffset = {
+    x: function () {
       $scope.abc.chartOffset.x = $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText();
+    },
+    y: function () {
+      $scope.abc.chartOffset.y = $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin;
+    },
+    width: function () {
       $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
+    },
+    height: function () {
+      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
+    }
+  };
+
+  var updateChartWidth = function (newValue, oldValue) {
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateChartOffset.x();
+      updateChartOffset.width();
     }
   };
 
   var updateChartHeight = function (newValue, oldValue) {
-    if (newValue !== oldValue) {
-      $scope.abc.chartOffset.y = $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin;
-      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
+    if (oldValue === undefined || newValue !== oldValue) {
+      updateChartOffset.y();
+      updateChartOffset.height();
     }
   };
 
@@ -468,11 +483,9 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     }
   };
 
-  $scope.abc.chartOffset = {
-    x: $scope.settings.margin + $scope.settings.axisTickSize*1.5 + $scope.abc.yLongestTickText(),
-    y: $scope.settings.margin + $scope.settings.title.size + $scope.settings.title.margin,
-    width: Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0),
-    height: Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0)
-  };
+  updateChartOffset.x();
+  updateChartOffset.y();
+  updateChartOffset.width();
+  updateChartOffset.height();
 
 }]);
