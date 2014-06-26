@@ -117,6 +117,18 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     }
   }, true);
 
+  $scope.$watch('settings.width', function (newVal, oldVal) {
+    if (newVal !== oldVal) {
+      $scope.abc.chartOffset.width = Math.max($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText(), 0);
+    }
+  }, true);
+
+  $scope.$watch('settings.height', function (newVal, oldVal) {
+    if (newVal !== oldVal) {
+      $scope.abc.chartOffset.height = Math.max($scope.settings.height - $scope.settings.margin*2 - $scope.settings.title.size - $scope.settings.title.margin - $scope.settings.axisTickSize - $scope.settings.headers.size, 0);
+    }
+  }, true);
+
   if ($scope.input.resize.width || $scope.input.resize.height){
     angular.element($window).bind('resize', function () {
       $scope.$apply();
@@ -169,7 +181,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     verticalLineOffset: function () {
       if ($scope.settings.hovering.y < 0 && $scope.settings.hovering.x >= 0) {
-        return $scope.settings.hovering.x * ($scope.settings.width - $scope.settings.margin*2 - $scope.settings.axisTickSize*1.5 - $scope.abc.yLongestTickText()) / ($scope.settings.data[0].length-1);
+        return $scope.settings.hovering.x * $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1);
       }
       return 0;
     },
