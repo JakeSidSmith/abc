@@ -1,6 +1,13 @@
 <svg ng-class="settings.class" ng-style="chartStyle" ng-attr-width="{{settings.width}}" ng-attr-height="{{settings.height}}" ng-mousemove="abc.setMouseOffset($event)" >
     <!-- Title -->
     <text id="abc-title" ng-show="settings.title.show === true" ng-attr-x="{{abc.titleOffset().x}}" ng-attr-y="{{abc.titleOffset().y}}" fill="black" ng-attr-text-anchor="{{abc.titleAnchor()}}" ng-attr-font-size="{{settings.title.size}}" ng-bind="settings.title.content"></text>
+    <!-- Regions -->
+    <g id="abc-regions" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
+      <g ng-repeat="region in settings.regions">
+        <rect y="0" ng-attr-x="{{abc.regionOffset(region).x}}" ng-attr-width="{{abc.regionOffset(region).width}}" ng-attr-height="{{abc.chartOffset.height}}" ng-attr-fill="{{region.color}}" fill-opacity="0.2"></rect>
+        <text text-anchor="middle" ng-attr-x="{{abc.regionTitleOffset(region).x}}" ng-attr-y="{{abc.regionTitleOffset(region).y}}" ng-bind="region.title" ng-attr-fill="{{region.color}}" fill-opacity="0.5"></text>
+      </g>
+    </g>
     <!-- Main Chart Elements -->
     <g id="abc-chart-element" ng-include="'views/abc-' + settings.type + '.html'"></g>
     <!-- Axis -->

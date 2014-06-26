@@ -105,6 +105,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.chartStyle = {};
   $scope.chartStyle.width = $scope.input.resize.width === true ? '100%' : '';
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
+  // Region defaults
+  $scope.input.regions = $scope.input.regions || [];
 
   $scope.settings = $scope.input;
 
@@ -511,6 +513,35 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
         }
       }
       return longest;
+    },
+    regionOffset: function (region) {
+      var start, end;
+      if (region.start > region.end) {
+        start = region.end;
+        end = region.start;
+      } else {
+        start = region.start;
+        end = region.end;
+      }
+      return {
+        x: $scope.abc.calculatePointXValue(start),
+        width: $scope.abc.calculatePointXValue(end - start)
+      };
+    },
+    regionTitleOffset: function (region) {
+      var start, end, dif;
+      if (region.start > region.end) {
+        start = region.end;
+        end = region.start;
+      } else {
+        start = region.start;
+        end = region.end;
+      }
+      dif = end - start;
+      return {
+        x: $scope.abc.calculatePointXValue(start + dif/2),
+        y: $scope.abc.chartOffset.height / 2
+      };
     }
   };
 
