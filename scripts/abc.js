@@ -107,6 +107,14 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
   // Region defaults
   $scope.input.regions = $scope.input.regions || [];
+  // Deault transforms
+  $scope.input.transform = $scope.input.transform || {};
+  $scope.input.transform.yLabels = $scope.input.transform.yLabels || function (value) {
+    return value;
+  };
+  $scope.input.transform.xLabels = $scope.input.transform.xLabels || function (value) {
+    return value;
+  };
 
   $scope.settings = $scope.input;
 
@@ -127,7 +135,11 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
 
   var updateYTicks = function () {
     // Update total
-    $scope.abc.yTickTotal = Math.max(Math.ceil(Math.max($scope.abc.chartOffset.height, 0) / ($scope.settings.headers.size * 2)), 1);
+    if ($scope.settings.headers.size <= 0) {
+      $scope.abc.yTickTotal = 1;
+    } else {
+      $scope.abc.yTickTotal = Math.max(Math.ceil(Math.max($scope.abc.chartOffset.height, 0) / ($scope.settings.headers.size * 2)), 1);
+    }
 
     // Rough offset
     var roughOffset = Math.max($scope.abc.highLowDif() / $scope.abc.yTickTotal, 0);
@@ -171,7 +183,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     }
   };
 
-  var highLowUpdate = function (newValue, oldValue) {
+  var changeTicksUpdate = function (newValue, oldValue) {
     if (oldValue === undefined || newValue !== oldValue) {
       updateYTicks();
     }
@@ -182,6 +194,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.$watch('settings.axisTickSize', chartWidthUpdate);
   $scope.$watch('settings.axisTickSize', chartWidthUpdate);
   $scope.$watch('abc.yTickInterval', chartWidthUpdate);
+  $scope.$watch('abc.yLongestTickText()', chartWidthUpdate);
 
   $scope.$watch('settings.height', chartHeightUpdate);
   $scope.$watch('settings.axisTickSize', chartHeightUpdate);
@@ -190,7 +203,8 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.$watch('settings.title.margin', chartHeightUpdate);
   $scope.$watch('settings.headers.size', chartHeightUpdate);
 
-  $scope.$watch('abc.highLow()', highLowUpdate, true);
+  $scope.$watch('abc.highLow()', changeTicksUpdate, true);
+  $scope.$watch('settings.headers.size', changeTicksUpdate);
 
   $scope.getElementDimensions = function () {
     return { 'width': $element.width(), 'height': $element.height() };
@@ -482,16 +496,20 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return (index + $scope.abc.yLowestTickIndex()) * $scope.abc.yTickInterval;
     },
     readableYTickValue: function (index) {
+      var returnValue;
       var value = $scope.abc.yTickValue(index);
 
       if (value < 0.1 && value > -0.1) {
         if (value === 0) {
-          return 0;
+          returnValue = 0;
+        } else {
+          var power = $scope.abc.powerToDecimal(value);
+          returnValue = value.toFixed(power.toString().length);
         }
-        var power = $scope.abc.powerToDecimal(value);
-        return value.toFixed(power.toString().length);
+      } else {
+        returnValue = value.toFixed(2);
       }
-      return value.toFixed(2);
+      return $scope.settings.transform.yLabels(returnValue);
     },
     yTickOffset: function (index) {
       return $scope.abc.calculatePointYValue( $scope.abc.yTickValue(index) );
