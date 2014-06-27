@@ -320,9 +320,15 @@ angular.module('angularAbc', [])
     },
     pointRadius: function (indexP, index)  {
       if ($scope.settings.hovering.y < 0) {
-        return Math.abs($scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize);
+        if ($scope.settings.hovering.x === index) {
+          return Math.abs($scope.settings.pointHoverSize);
+        }
+        return Math.abs($scope.settings.pointSize);
       }
-      return Math.abs($scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index ? $scope.settings.pointHoverSize : $scope.settings.pointSize);
+      if ($scope.settings.hovering.y === indexP && $scope.settings.hovering.x === index) {
+        return Math.abs($scope.settings.pointHoverSize);
+      }
+      return Math.abs($scope.settings.pointSize);
     },
     popupLegendX: function () {
       var maxOffset = $scope.abc.chartOffset.width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
