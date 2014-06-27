@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('abcApp');
+angular.module('angularAbc', [])
 
-app.service('ABC', [function () {
+.service('ABC', [function () {
 
   var service = {};
 
@@ -37,9 +37,9 @@ app.service('ABC', [function () {
 
   return service;
 
-}]);
+}])
 
-app.directive('abc', [function () {
+.directive('abc', [function () {
 
   return {
     restrict: 'AE',
@@ -47,13 +47,13 @@ app.directive('abc', [function () {
     scope: {
       input: '=data'
     },
-    templateUrl: 'views/abc.html',
+    templateUrl: 'bower_components/angular-abc/views/abc.html',
     controller: 'abcController'
   };
 
-}]);
+}])
 
-app.controller('abcController', ['$scope', '$element', '$window', function ($scope, $element, $window) {
+.controller('abcController', ['$scope', '$element', '$window', function ($scope, $element, $window) {
 
   // Chart class
   $scope.input.class = $scope.input.class || 'abc-chart';
@@ -515,6 +515,7 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       } else {
         returnValue = value.toFixed(2);
       }
+
       return $scope.settings.transform.yLabels(returnValue);
     },
     yTickOffset: function (index) {
