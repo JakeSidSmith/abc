@@ -79,10 +79,6 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.input.axisTickSize = $scope.input.axisTickSize || 4;
   $scope.input.pointSize = $scope.input.pointSize || 2.5;
   $scope.input.pointHoverSize = $scope.input.pointHoverSize || 4;
-  // Default unit
-  $scope.input.unit = $scope.input.unit || {};
-  $scope.input.unit.type = $scope.input.unit.type || '%';
-  $scope.input.unit.position = $scope.input.unit.position || 'after';
   // Default resize settings
   $scope.input.resize = $scope.input.resize || {};
   $scope.input.resize.width = $scope.input.resize.width === false ? false : true;
@@ -344,14 +340,21 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       }
       return rightOffset;
     },
-    valueInUnit: function (indexP, index) {
+    popupLabel: function (indexP) {
+      var value;
+      if (indexP < 0) {
+        return '';
+      } else {
+        value = $scope.settings.headers.rows[$scope.settings.hovering.y].value;
+      }
+      return $scope.settings.transform.popupLabels(value);
+    },
+    popupValue: function (indexP, index) {
       var value;
       if (indexP < 0 || index < 0) {
-        value = '';
-      } else if ($scope.settings.unit.position === 'before') {
-        value = $scope.settings.unit.type + $scope.settings.data[indexP][index].value;
+        return '';
       } else {
-        value = $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
+        value = $scope.settings.data[indexP][index].value;
       }
       return $scope.settings.transform.popupValues(value);
     },
