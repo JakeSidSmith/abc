@@ -54,7 +54,7 @@
       <!-- Popup Legend -->
       <g id="abc-popup-legend" ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-transform="translate({{abc.popupLegendX()}}, {{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y - 10}})" >
         <rect x="0" y="0" ng-attr-width="{{abc.getTextLength('#abc-popup-column-text') + abc.getTextLength('#abc-popup-value-text') + 16}}" height="20" fill-opacity="0.8" stroke-opacity="0.5" fill="white" stroke="black" stroke-width="1"></rect>
-        <text id="abc-popup-column-text" x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.headers.rows[settings.hovering.y].value"></text>
+        <text id="abc-popup-column-text" x="4" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="settings.transform.popupLabels(settings.headers.rows[settings.hovering.y].value)"></text>
         <text id="abc-popup-value-text" ng-attr-x="{{abc.getTextLength('#abc-popup-column-text') + 8}}" y="14" fill="black" font-size="12" text-anchor="left" ng-bind="abc.valueInUnit(settings.hovering.y, settings.hovering.x)"></text>
       </g>
     </g>

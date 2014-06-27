@@ -109,12 +109,13 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
   $scope.input.regions = $scope.input.regions || [];
   // Deault transforms
   $scope.input.transform = $scope.input.transform || {};
-  $scope.input.transform.yLabels = $scope.input.transform.yLabels || function (value) {
+  var returnValue = function (value) {
     return value;
   };
-  $scope.input.transform.xLabels = $scope.input.transform.xLabels || function (value) {
-    return value;
-  };
+  $scope.input.transform.yLabels = $scope.input.transform.yLabels || returnValue;
+  $scope.input.transform.xLabels = $scope.input.transform.xLabels || returnValue;
+  $scope.input.transform.popupLabels = $scope.input.transform.popupLabels || returnValue;
+  $scope.input.transform.popupValues = $scope.input.transform.popupValues || returnValue;
 
   $scope.settings = $scope.input;
 
@@ -344,13 +345,15 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
       return rightOffset;
     },
     valueInUnit: function (indexP, index) {
+      var value;
       if (indexP < 0 || index < 0) {
-        return '';
+        value = '';
+      } else if ($scope.settings.unit.position === 'before') {
+        value = $scope.settings.unit.type + $scope.settings.data[indexP][index].value;
+      } else {
+        value = $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
       }
-      if ($scope.settings.unit.position === 'before') {
-        return $scope.settings.unit.type + $scope.settings.data[indexP][index].value;
-      }
-      return $scope.settings.data[indexP][index].value + $scope.settings.unit.type;
+      return $scope.settings.transform.popupValues(value);
     },
     calculatePointYValue: function (value) {
       var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowDif();
