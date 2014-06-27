@@ -127,7 +127,11 @@ angular.module('angularAbc', [])
 
   var updateYTicks = function () {
     // Update total
-    $scope.abc.yTickTotal = Math.max(Math.ceil(Math.max($scope.abc.chartOffset.height, 0) / ($scope.settings.headers.size * 2)), 1);
+    if ($scope.settings.headers.size <= 0) {
+      $scope.abc.yTickTotal = 1;
+    } else {
+      $scope.abc.yTickTotal = Math.max(Math.ceil(Math.max($scope.abc.chartOffset.height, 0) / ($scope.settings.headers.size * 2)), 1);
+    }
 
     // Rough offset
     var roughOffset = Math.max($scope.abc.highLowDif() / $scope.abc.yTickTotal, 0);
