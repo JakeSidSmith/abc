@@ -309,11 +309,11 @@ app.controller('abcController', ['$scope', '$element', '$window', function ($sco
     },
     highLowDif: function () {
       var highLow = $scope.abc.highLow();
-      return this.difference(highLow.lowest, highLow.highest);
+      return $scope.abc.difference(highLow.lowest, highLow.highest);
     },
     highLowBarDif: function () {
       var highLow = $scope.abc.highLow();
-      return this.difference(Math.min(highLow.lowest, 0), Math.max(highLow.highest, 0));
+      return $scope.abc.difference(Math.min(highLow.lowest, 0), Math.max(highLow.highest, 0));
     },
     difference: function (value1, value2) {
       return Math.abs(value1 - value2);
