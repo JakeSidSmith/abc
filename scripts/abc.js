@@ -64,7 +64,7 @@ angular.module('angularAbc', [])
   $scope.input.title.content = $scope.input.title.content;
   $scope.input.title.show = $scope.input.title.show === false ? false : true;
   $scope.input.title.align = $scope.input.title.align || 'center';
-  if ($scope.input.title) {
+  if ($scope.input.title.content) {
     $scope.input.title.size = $scope.input.title.size !== undefined ? $scope.input.title.size : 12;
     $scope.input.title.margin = $scope.input.title.margin !== undefined ? $scope.input.title.margin : 10;
   } else {
