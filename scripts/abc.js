@@ -87,7 +87,7 @@ angular.module('angularAbc', [])
   // Default resize settings
   $scope.input.resize = $scope.input.resize || {};
   $scope.input.resize.width = $scope.input.resize.width === false ? false : true;
-  $scope.input.resize.height = $scope.input.resize.height === false ? false : true;
+  $scope.input.resize.height = $scope.input.resize.height || false;
   // Default margin
   $scope.input.margin = $scope.input.margin !== undefined ? $scope.input.margin : 10;
   // Default sizes
