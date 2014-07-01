@@ -114,7 +114,15 @@ The version at the time of writing this is `0.1.0`.
             colors: ['#d24949', '#e59648', '#4f8f47', '#316e93', '#684c8a'],
 
             // Regions
-            regions: [],
+            regions: [
+              {
+                start: 0,
+                end: 1,
+                color: 'red',
+                title: 'Region 1',
+                size: 12
+              }
+            ],
 
             // Text transforms
             transforms: {
