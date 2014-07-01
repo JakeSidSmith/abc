@@ -61,36 +61,41 @@ angular.module('angularAbc', [])
   $scope.input.nofocusClass = $scope.input.nofocusClass || 'abc-nofocus';
   // Default title
   $scope.input.title = $scope.input.title || {};
-  $scope.input.title.content = $scope.input.title.content || 'A Chart';
-  $scope.input.title.size = $scope.input.title.size || 12;
+  $scope.input.title.content = $scope.input.title.content;
   $scope.input.title.show = $scope.input.title.show === false ? false : true;
   $scope.input.title.align = $scope.input.title.align || 'center';
-  $scope.input.title.margin = $scope.input.title.margin || 10;
+  if ($scope.input.title.content) {
+    $scope.input.title.size = $scope.input.title.size !== undefined ? $scope.input.title.size : 12;
+    $scope.input.title.margin = $scope.input.title.margin !== undefined ? $scope.input.title.margin : 10;
+  } else {
+    $scope.input.title.size = 0;
+    $scope.input.title.margin = 0;
+  }
   // Default hovering indices
   $scope.input.hovering = $scope.input.hovering || {};
-  $scope.input.hovering.x = $scope.input.hovering.x || -1;
-  $scope.input.hovering.y = $scope.input.hovering.y || -1;
+  $scope.input.hovering.x = $scope.input.hovering.x !== undefined ? $scope.input.hovering.x : -1;
+  $scope.input.hovering.y = $scope.input.hovering.y !== undefined ? $scope.input.hovering.y : -1;
   // Default chart type
   $scope.input.type = $scope.input.type || 'line';
   // Default chart element sizes
-  $scope.input.lineWidth = $scope.input.lineWidth || 2;
-  $scope.input.axisLineWidth = $scope.input.axisLineWidth || 1;
-  $scope.input.axisTickWidth = $scope.input.axisTickSize || 1;
-  $scope.input.axisTickSize = $scope.input.axisTickSize || 4;
-  $scope.input.pointSize = $scope.input.pointSize || 2.5;
-  $scope.input.pointHoverSize = $scope.input.pointHoverSize || 4;
+  $scope.input.lineWidth = $scope.input.lineWidth !== undefined ? $scope.input.lineWidth : 2;
+  $scope.input.axisLineWidth = $scope.input.axisLineWidth !== undefined ? $scope.input.axisLineWidth : 1;
+  $scope.input.axisTickWidth = $scope.input.axisTickSize !== undefined ? $scope.input.axisTickSize : 1;
+  $scope.input.axisTickSize = $scope.input.axisTickSize !== undefined ? $scope.input.axisTickSize : 4;
+  $scope.input.pointSize = $scope.input.pointSize !== undefined ? $scope.input.pointSize : 2.5;
+  $scope.input.pointHoverSize = $scope.input.pointHoverSize !== undefined ? $scope.input.pointHoverSize : 4;
   // Default resize settings
   $scope.input.resize = $scope.input.resize || {};
   $scope.input.resize.width = $scope.input.resize.width === false ? false : true;
-  $scope.input.resize.height = $scope.input.resize.height === false ? false : true;
+  $scope.input.resize.height = $scope.input.resize.height || false;
   // Default margin
-  $scope.input.margin = $scope.input.margin || 10;
+  $scope.input.margin = $scope.input.margin !== undefined ? $scope.input.margin : 10;
   // Default sizes
   $scope.input.width = $scope.input.width || 0;
   $scope.input.height = $scope.input.height || 0;
   // Default Headers
   $scope.input.headers = $scope.input.headers || {};
-  $scope.input.headers.size = $scope.input.headers.size || 10;
+  $scope.input.headers.size = $scope.input.headers.size !== undefined ? $scope.input.headers.size : 10;
   $scope.input.headers.columns = $scope.input.headers.columns || [];
   $scope.input.headers.rows = $scope.input.headers.rows || [];
   // Default data
