@@ -442,7 +442,7 @@ angular.module('angularAbc', [])
     },
     hoverAreaOffset: function (index) {
       return {
-        x: $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * (index-0.5) + $scope.settings.margin,
+        x: $scope.abc.chartOffset.width / ($scope.settings.data[0].length-1) * (index-0.5),
         width: Math.max($scope.abc.chartOffset.width / ($scope.settings.data[0].length-1), 0)
       };
     },
