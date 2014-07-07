@@ -578,7 +578,7 @@ angular.module('angularAbc', [])
       dif = end - start;
       return {
         x: $scope.abc.calculatePointXValue(start + dif/2),
-        y: $scope.abc.chartOffset.height / 2
+        y: $scope.abc.chartOffset.height / 2 + region.size / 2
       };
     },
     getBandStart: function (band) {
