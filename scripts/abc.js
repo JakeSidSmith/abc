@@ -567,6 +567,18 @@ angular.module('angularAbc', [])
       };
     },
     regionTitleOffset: function (region) {
+      var yPos;
+      if (!region.titleY || region.titleY === 'center') {
+        yPos = $scope.abc.chartOffset.height / 2 + region.size / 2;
+      } else if (region.titleY === 'top') {
+        yPos = region.size;
+      } else if (region.titleY === 'bottom') {
+        yPos = $scope.abc.chartOffset.height - region.size / 2;
+      } else {
+        yPos = $scope.abc.chartOffset.height * region.titleY + region.size / 2;
+      }
+
+
       var start, end, dif;
       if (region.start > region.end) {
         start = region.end;
@@ -578,7 +590,7 @@ angular.module('angularAbc', [])
       dif = end - start;
       return {
         x: $scope.abc.calculatePointXValue(start + dif/2),
-        y: $scope.abc.chartOffset.height / 2 + region.size / 2
+        y: yPos
       };
     },
     getBandStart: function (band) {
