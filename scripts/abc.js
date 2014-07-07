@@ -578,7 +578,6 @@ angular.module('angularAbc', [])
         yPos = $scope.abc.chartOffset.height * region.titleY + region.size / 2;
       }
 
-
       var start, end, dif;
       if (region.start > region.end) {
         start = region.end;
