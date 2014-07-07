@@ -132,6 +132,17 @@ The version at the time of writing this is `0.1.0`.
               }
             ],
 
+            // Bands
+            bands: [
+              {
+                start: 0, // Start & end can be exact values
+                end: 'bottom', // Start & End can be 'top' or 'bottom'
+                color: 'red',
+                title: 'Lower band',
+                size: 10
+              }
+            ],
+
             // Text transforms
             transforms: {
                 yLabels: function,
