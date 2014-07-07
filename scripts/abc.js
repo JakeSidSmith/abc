@@ -108,6 +108,8 @@ angular.module('angularAbc', [])
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
   // Region defaults
   $scope.input.regions = $scope.input.regions || [];
+  // Region bands
+  $scope.input.bands = $scope.input.bands || [];
   // Deault transforms
   $scope.input.transform = $scope.input.transform || {};
   var returnValue = function (value) {
