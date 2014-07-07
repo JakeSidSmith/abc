@@ -613,7 +613,7 @@ angular.module('angularAbc', [])
         end = temp;
       }
 
-      var point1 = Math.max($scope.abc.calculatePointYValue(start), 0);
+      var point1 = Math.min(Math.max($scope.abc.calculatePointYValue(start), 0), $scope.abc.chartOffset.height);
       var point2 = Math.max(Math.abs(start - end) * multiplier, 0);
 
       if (point1 + point2 > $scope.abc.chartOffset.height) {
