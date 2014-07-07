@@ -56,6 +56,14 @@ The version at the time of writing this is `0.1.0`.
             ...
         ]);
 
+6. If you plan on running any tests using karma you'll have to include ABC in your `karma.conf.js` file
+
+        files: [
+          ...
+          'bower_components/angular-abc/scripts/abc.js',
+          ...
+        ],
+
 ## Implementation
 
 1. Prepare your data to use with ABC. I'd recommend using the ABC service to transform your data.
