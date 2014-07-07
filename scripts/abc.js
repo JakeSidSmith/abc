@@ -108,6 +108,8 @@ angular.module('angularAbc', [])
   $scope.chartStyle.height = $scope.input.resize.height === true ? '100%' : '';
   // Region defaults
   $scope.input.regions = $scope.input.regions || [];
+  // Region bands
+  $scope.input.bands = $scope.input.bands || [];
   // Deault transforms
   $scope.input.transform = $scope.input.transform || {};
   var returnValue = function (value) {
@@ -577,6 +579,57 @@ angular.module('angularAbc', [])
       return {
         x: $scope.abc.calculatePointXValue(start + dif/2),
         y: $scope.abc.chartOffset.height / 2
+      };
+    },
+    getBandStart: function (band) {
+      if (band.start === 'top') {
+        return $scope.abc.highLow().highest;
+      }
+      if (band.start === 'bottom') {
+        return $scope.abc.highLow().lowest;
+      }
+      return band.start;
+    },
+    getBandEnd: function (band) {
+      if (band.end === 'top') {
+        return $scope.abc.highLow().highest;
+      }
+      if (band.end === 'bottom') {
+        return $scope.abc.highLow().lowest;
+      }
+      return band.end;
+    },
+    bandOffset: function (band) {
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
+      var start, end;
+      // Get start
+      start = $scope.abc.getBandStart(band);
+      // Get end
+      end = $scope.abc.getBandEnd(band);
+      // Swap if in wrong order (prevent negative heights)
+      if (start < end) {
+        var temp = start;
+        start = end;
+        end = temp;
+      }
+
+      var point1 = Math.min(Math.max($scope.abc.calculatePointYValue(start), 0), $scope.abc.chartOffset.height);
+      var point2 = Math.max(Math.abs(start - end) * multiplier, 0);
+
+      if (point1 + point2 > $scope.abc.chartOffset.height) {
+        point2 = $scope.abc.chartOffset.height - point1;
+      }
+
+      return {
+        y: point1,
+        height: point2
+      };
+    },
+    bandTitleOffset: function (band) {
+      var bandOffset = $scope.abc.bandOffset(band);
+
+      return {
+        y: bandOffset.y + bandOffset.height / 2 + band.size / 2
       };
     }
   };
