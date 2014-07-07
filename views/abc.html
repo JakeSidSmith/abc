@@ -18,7 +18,7 @@
           <rect x="0" ng-attr-width="{{abc.chartOffset.width}}" ng-attr-y="{{abc.bandOffset(band).y}}" ng-attr-height="{{abc.bandOffset(band).height}}"></rect>
         </clipPath>
         <rect id="abc-band-rectangle" x="0" ng-attr-width="{{abc.chartOffset.width}}" ng-attr-y="{{abc.bandOffset(band).y}}" ng-attr-height="{{abc.bandOffset(band).height}}" ng-attr-fill="{{band.color}}" fill-opacity="0.2"></rect>
-        <text clip-path="url(#abc-band-clip-path-{{$index}})" text-anchor="middle" ng-attr-x="{{abc.bandTitleOffset(band).width}}" ng-attr-y="{{abc.bandTitleOffset(band).y}}" ng-bind="band.title" ng-attr-font-size="{{band.size}}" ng-attr-fill="{{band.color}}" fill-opacity="0.5"></text>
+        <text clip-path="url(#abc-band-clip-path-{{$index}})" text-anchor="middle" ng-attr-x="{{abc.chartOffset.width / 2}}" ng-attr-y="{{abc.bandTitleOffset(band).y}}" ng-bind="band.title" ng-attr-font-size="{{band.size}}" ng-attr-fill="{{band.color}}" fill-opacity="0.5"></text>
       </g>
     </g>
     <!-- Main Chart Elements -->
