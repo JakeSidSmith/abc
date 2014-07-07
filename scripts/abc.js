@@ -580,6 +580,40 @@ angular.module('angularAbc', [])
         x: $scope.abc.calculatePointXValue(start + dif/2),
         y: $scope.abc.chartOffset.height / 2
       };
+    },
+    bandOffset: function (band) {
+      var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowBarDif();
+      var start, end;
+      // Get start
+      if (band.start === 'top') {
+        start = $scope.abc.highLow().highest;
+      } else if (band.start === 'bottom') {
+        start = $scope.abc.highLow().lowest;
+      } else {
+        start = band.start;
+      }
+      // Get end
+      if (band.end === 'top') {
+        end = $scope.abc.highLow().highest;
+      } else if (band.end === 'bottom') {
+        end = $scope.abc.highLow().lowest;
+      } else {
+        end = band.end;
+      }
+      // Swap if in wrong order (prevent negative heights)
+      if (start < end) {
+        var temp = start;
+        start = end;
+        end = temp;
+      }
+
+      var point1 = $scope.abc.calculatePointYValue(start);
+      var point2 = end * multiplier;
+
+      return {
+        y: Math.max($scope.abc.calculatePointYValue(start), 0),
+        height: Math.min(Math.max(Math.abs(start - end) * multiplier, 0), $scope.abc.chartOffset.height)
+      };
     }
   };
 

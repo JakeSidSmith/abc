@@ -11,6 +11,16 @@
         <text clip-path="url(#abc-region-clip-path-{{$index}})" text-anchor="middle" ng-attr-x="{{abc.regionTitleOffset(region).x}}" ng-attr-y="{{abc.regionTitleOffset(region).y}}" ng-bind="region.title" ng-attr-font-size="{{region.size}}" ng-attr-fill="{{region.color}}" fill-opacity="0.5"></text>
       </g>
     </g>
+    <!-- Bands -->
+    <g id="abc-bands" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
+      <g ng-repeat="band in settings.bands">
+        <clipPath id="abc-band-clip-path-{{$index}}">
+          <rect x="0" ng-attr-width="{{abc.chartOffset.width}}" ng-attr-y="{{abc.bandOffset(band).y}}" ng-attr-height="{{abc.bandOffset(band).height}}"></rect>
+        </clipPath>
+        <rect id="abc-band-rectangle" x="0" ng-attr-width="{{abc.chartOffset.width}}" ng-attr-y="{{abc.bandOffset(band).y}}" ng-attr-height="{{abc.bandOffset(band).height}}" ng-attr-fill="{{band.color}}" fill-opacity="0.2"></rect>
+        <text clip-path="url(#abc-band-clip-path-{{$index}})" text-anchor="middle" ng-attr-x="{{abc.bandTitleOffset(band).width}}" ng-attr-y="{{abc.bandTitleOffset(band).y}}" ng-bind="band.title" ng-attr-font-size="{{band.size}}" ng-attr-fill="{{band.color}}" fill-opacity="0.5"></text>
+      </g>
+    </g>
     <!-- Main Chart Elements -->
     <g id="abc-chart-element" ng-include="'bower_components/angular-abc/views/abc-' + settings.type + '.html'"></g>
     <!-- Axis -->
