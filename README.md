@@ -128,7 +128,8 @@ The version at the time of writing this is `0.2.0`.
                 end: 1,
                 color: 'red',
                 title: 'Region 1',
-                size: 12
+                size: 12,
+                titleY: 'top' // 'top', 'center', 'bottom', or number e.g. 0.5 (half) or 0.75 (3 quarters)
               }
             ],
 
