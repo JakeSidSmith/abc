@@ -121,6 +121,8 @@ angular.module('angularAbc', [])
   $scope.input.transform.popupValues = $scope.input.transform.popupValues || returnValue;
   // Axis offset
   $scope.input.xAxisLabelOffset = $scope.input.xAxisLabelOffset || 0;
+  // Axis culling
+  $scope.input.xAxisLabelCulling = $scope.input.xAxisLabelCulling === undefined ? true : $scope.input.xAxisLabelCulling;
 
   $scope.settings = $scope.input;
 
@@ -174,10 +176,25 @@ angular.module('angularAbc', [])
     }
   };
 
+  var xAxisLabelCullingUpdate = function () {
+    var labels = $element.find('.abc-x-labels');
+    var totalLabelWidth = 0;
+
+    for (var i = 0; i < labels.length; i += 1) {
+      // Multiply by 1.2 in case some labels are larger than others
+      totalLabelWidth += labels[i].getComputedTextLength() * 1.2;
+    }
+
+    $scope.abc.xAxisShowEveryOther = Math.ceil(totalLabelWidth / $scope.abc.chartOffset.width);
+  };
+
   var chartWidthUpdate = function (newValue, oldValue) {
     if (oldValue === undefined || newValue !== oldValue) {
       updateChartOffset.x();
       updateChartOffset.width();
+      if ($scope.settings.xAxisLabelCulling) {
+        xAxisLabelCullingUpdate();
+      }
     }
   };
 
@@ -230,6 +247,7 @@ angular.module('angularAbc', [])
   }
 
   $scope.abc = {
+    xAxisShowEveryOther: 1,
     mouseOffset: {
       x: 0,
       y: 0
@@ -644,6 +662,12 @@ angular.module('angularAbc', [])
       return {
         y: bandOffset.y + bandOffset.height / 2 + band.size / 2
       };
+    },
+    xAxisLabelOpacity: function (index) {
+      if (!$scope.settings.xAxisLabelCulling) {
+        return 1;
+      }
+      return index % $scope.abc.xAxisShowEveryOther === 0 ? 1 : 0;
     }
   };
 
