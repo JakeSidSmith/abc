@@ -118,6 +118,9 @@ The version at the time of writing this is `0.2.0`.
             pointSize: 2.5,
             pointHoverSize: 4,
 
+            // Axis options
+            xAxisLabelOffset: 0.5, // Offset by 0.5 ticks
+
             // Chart colors
             colors: ['#d24949', '#e59648', '#4f8f47', '#316e93', '#684c8a'],
 
