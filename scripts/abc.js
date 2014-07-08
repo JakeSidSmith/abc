@@ -120,7 +120,7 @@ angular.module('angularAbc', [])
   $scope.input.transform.popupLabels = $scope.input.transform.popupLabels || returnValue;
   $scope.input.transform.popupValues = $scope.input.transform.popupValues || returnValue;
   // Axis offset
-  $scope.input.yAxisLabelOffset = $scope.input.yAxisLabelOffset || 0;
+  $scope.input.xAxisLabelOffset = $scope.input.xAxisLabelOffset || 0;
 
   $scope.settings = $scope.input;
 
