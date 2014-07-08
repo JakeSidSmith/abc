@@ -663,7 +663,7 @@ angular.module('angularAbc', [])
         y: bandOffset.y + bandOffset.height / 2 + band.size / 2
       };
     },
-    xAxisLabelCulling: function (index) {
+    xAxisLabelOpacity: function (index) {
       if (!$scope.settings.xAxisLabelCulling) {
         return 1;
       }
