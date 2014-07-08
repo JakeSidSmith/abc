@@ -1,4 +1,4 @@
-# Angular Bound Charts
+# Angular Bound Charts v 0.3.0
 
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
 
@@ -13,11 +13,11 @@ Feel free to fork or give suggestions for features. Constructive criticism is we
 These instructions apply to an application setup using [Yeoman](http://yeoman.io/) but can easily be adjusted to your needs.
 
 1. First you'll have to add ABC to your `bower.json`, I'd suggest pinning a specific version using `=`.
-The version at the time of writing this is `0.2.0`.
+The version at the time of writing this is `0.3.0`.
 
         "dependencies": {
             ...
-            "angular-abc": "=0.2.0"
+            "angular-abc": "=0.3.0"
             ...
         }
 
@@ -117,6 +117,9 @@ The version at the time of writing this is `0.2.0`.
             axisTickSize: 4,
             pointSize: 2.5,
             pointHoverSize: 4,
+
+            // Axis options
+            xAxisLabelOffset: 0.5, // Offset by 0.5 ticks
 
             // Chart colors
             colors: ['#d24949', '#e59648', '#4f8f47', '#316e93', '#684c8a'],

@@ -36,7 +36,7 @@
       <!-- X Axis Ticks -->
       <line ng-repeat="tick in settings.data[0]" ng-attr-x1="{{abc.calculatePointXValue($index)}}" ng-attr-y1="{{abc.chartOffset.height}}" ng-attr-x2="{{abc.calculatePointXValue($index)}}" ng-attr-y2="{{abc.chartOffset.height + settings.axisTickSize}}" stroke="black" ng-attr-stroke-width="{{settings.axisTickWidth}}"></line>
       <!-- X Axis Labels -->
-      <text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.calculatePointXValue($index)}}" ng-attr-y="{{abc.chartOffset.height + settings.axisTickSize + settings.headers.size}}" text-anchor="middle" ng-bind="settings.transform.xLabels(column.value)" ng-attr-font-size="{{settings.headers.size}}"></text>
+      <text ng-repeat="column in settings.headers.columns" ng-attr-x="{{abc.calculatePointXValue($index + settings.xAxisLabelOffset)}}" ng-attr-y="{{abc.chartOffset.height + settings.axisTickSize + settings.headers.size}}" text-anchor="middle" ng-bind="settings.transform.xLabels(column.value)" ng-attr-font-size="{{settings.headers.size}}"></text>
     </g>
     <!-- Hovering lines & areas -->
     <g id="abc-hovering-areas" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
