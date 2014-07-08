@@ -121,6 +121,8 @@ angular.module('angularAbc', [])
   $scope.input.transform.popupValues = $scope.input.transform.popupValues || returnValue;
   // Axis offset
   $scope.input.xAxisLabelOffset = $scope.input.xAxisLabelOffset || 0;
+  // Axis culling
+  $scope.input.xAxisCulling = $scope.input.xAxisCulling === undefined ? true : $scope.input.xAxisCulling;
 
   $scope.settings = $scope.input;
 
