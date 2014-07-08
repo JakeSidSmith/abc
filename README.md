@@ -1,4 +1,4 @@
-# Angular Bound Charts v 0.3.0
+# Angular Bound Charts v 0.3.1
 
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
 
@@ -120,6 +120,7 @@ The version at the time of writing this is `0.3.0`.
 
             // Axis options
             xAxisLabelOffset: 0.5, // Offset by 0.5 ticks
+            xAxisLabelCulling: true, // Automatically hides some axis labels when needed
 
             // Chart colors
             colors: ['#d24949', '#e59648', '#4f8f47', '#316e93', '#684c8a'],
