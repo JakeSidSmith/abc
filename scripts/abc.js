@@ -575,7 +575,7 @@ angular.module('angularAbc', [])
       } else if (region.titleY === 'bottom') {
         yPos = $scope.abc.chartOffset.height - region.size / 2;
       } else {
-        yPos = $scope.abc.chartOffset.height * region.titleY + region.size / 2;
+        yPos = $scope.abc.chartOffset.height * (1 - region.titleY) + region.size / 2;
       }
 
       var start, end, dif;
