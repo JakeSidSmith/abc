@@ -235,8 +235,12 @@ angular.module('angularAbc', [])
 
   $scope.$watch('getElementDimensions()', function (newValue, oldValue) {
     if (oldValue !== newValue) {
-      $scope.settings.width = $element.width();
-      $scope.settings.height = $element.height();
+      if ($scope.settings.resize.width) {
+        $scope.settings.width = $element.width();
+      }
+      if ($scope.settings.resize.height) {
+        $scope.settings.height = $element.height();
+      }
     }
   }, true);
 
