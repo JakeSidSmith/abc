@@ -281,12 +281,12 @@ angular.module('angularAbc', [])
     titleOffset: function () {
       var getX = function () {
         if ($scope.settings.title.align === 'left') {
-          return $scope.settings.margin;
+          return $scope.abc.chartOffset.x;
         }
         if ($scope.settings.title.align === 'right') {
-          return $scope.settings.width - $scope.settings.margin - $scope.abc.getTextLength('#abc-title');
+          return $scope.abc.chartOffset.x + $scope.abc.chartOffset.width;
         }
-        return $scope.settings.width / 2;
+        return $scope.abc.chartOffset.x + ($scope.abc.chartOffset.width / 2);
       };
       return {
         x: getX(),
@@ -307,8 +307,11 @@ angular.module('angularAbc', [])
       return text[0].getComputedTextLength();
     },
     titleAnchor: function () {
-      if ($scope.settings.title.align === 'left' || $scope.settings.title.align === 'right') {
-        return $scope.settings.title.align;
+      if ($scope.settings.title.align === 'left') {
+        return 'start';
+      }
+      if ($scope.settings.title.align === 'right') {
+        return 'end';
       }
       return 'middle';
     },
