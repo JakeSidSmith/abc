@@ -70,8 +70,8 @@
     <g id="abc-popup" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
       <!-- Popup Legend -->
       <g id="abc-popup-legend" ng-show="settings.hovering.y >= 0 && settings.hovering.x >= 0" ng-attr-transform="translate({{abc.popupLegendX()}}, {{abc.calculatePoint(settings.hovering.y, settings.hovering.x).y - 30}})" >
-        <rect id="popup-header-backgorund" x="0" y="0" ng-attr-width="{{abc.popupWidth()}}" height="20" fill-opacity="0.9" stroke-opacity="0.5" fill="grey" stroke="grey" stroke-width="1"></rect>
-        <rect id="popup-value-backgorund" x="0" y="20" ng-attr-width="{{abc.popupWidth()}}" height="20" fill-opacity="0.9" stroke-opacity="0.5" fill="white" stroke="grey" stroke-width="1"></rect>
+        <rect id="popup-header-background" x="0" y="0" ng-attr-width="{{abc.popupWidth()}}" height="20" fill-opacity="0.9" stroke-opacity="0.5" fill="grey" stroke="grey" stroke-width="1"></rect>
+        <rect id="popup-value-background" x="0" y="20" ng-attr-width="{{abc.popupWidth()}}" height="20" fill-opacity="0.9" stroke-opacity="0.5" fill="white" stroke="grey" stroke-width="1"></rect>
         <g id="popup-headers">
           <text id="abc-popup-column-text" x="4" y="15" fill="white" font-size="12" text-anchor="left" ng-bind="abc.popupColumnLabel(settings.hovering.x)"></text>
           <text id="abc-popup-row-text" x="4" y="35" fill="black" font-size="12" text-anchor="left" ng-bind="abc.popupRowLabel(settings.hovering.y)"></text>
