@@ -177,7 +177,7 @@ angular.module('angularAbc', [])
   };
 
   var xAxisLabelCullingUpdate = function () {
-    var labels = $element.find('.abc-x-labels');
+    var labels = $element.find('#abc-x-labels').children();
     var totalLabelWidth = 0;
 
     for (var i = 0; i < labels.length; i += 1) {
@@ -562,16 +562,19 @@ angular.module('angularAbc', [])
       return $scope.abc.calculatePointYValue( $scope.abc.yTickValue(index) );
     },
     yTickTextLength: function (index) {
-      var text = $element.find('.abc-y-labels');
-      return text[index].getComputedTextLength();
+      var labels = $element.find('#abc-y-labels').children();
+      if (labels.length === 0) {
+        return 0;
+      }
+      return labels[index].getComputedTextLength();
     },
     yLongestTickText: function () {
-      var texts = $element.find('.abc-y-labels');
+      var labels = $element.find('#abc-y-labels').children();
       var longestFound = false;
       var longest = 0;
 
-      for (var i = 0; i < texts.length; i += 1) {
-        var textLength = texts[i].getComputedTextLength();
+      for (var i = 0; i < labels.length; i += 1) {
+        var textLength = labels[i].getComputedTextLength();
         if (!longestFound || textLength > longest) {
           longest = textLength;
           longestFound = true;
@@ -675,6 +678,9 @@ angular.module('angularAbc', [])
         return 1;
       }
       return index % $scope.abc.xAxisShowEveryOther === 0 ? 1 : 0;
+    },
+    yAxisLabelY: function (index) {
+      return 0 - $scope.settings.axisTickSize*1.5 - $scope.abc.yTickTextLength(index);
     }
   };
 
@@ -685,4 +691,33 @@ angular.module('angularAbc', [])
   updateChartOffset.height();
   updateYTicks();
 
+}])
+
+.directive('abcLine', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-line.html'
+  };
+}])
+.directive('abcArea', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-area.html'
+  };
+}])
+.directive('abcSpline', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-spline.html'
+  };
+}])
+.directive('abcBar', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-bar.html'
+  };
 }]);
