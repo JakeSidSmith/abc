@@ -155,7 +155,8 @@ The version at the time of writing this is `0.3.0`.
                 yLabels: function,
                 xLabels: function,
                 popupLabels: function,
-                popupValues: function
+                popupValues: function,
+                popupHeaders: function
             }
 
             // Title settings
