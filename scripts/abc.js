@@ -256,9 +256,6 @@ angular.module('angularAbc', [])
       x: 0,
       y: 0
     },
-    includeChartElement: function () {
-      return ('<abc-' + $scope.settings.type + '></abc-' + $scope.settings.type + '>').toString();
-    },
     setMouseOffset: function ($event) {
       $scope.abc.mouseOffset.x = $event.offsetX;
       $scope.abc.mouseOffset.y = $event.offsetY;
