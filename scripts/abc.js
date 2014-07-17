@@ -366,18 +366,22 @@ angular.module('angularAbc', [])
       return Math.abs($scope.settings.pointSize);
     },
     popupLegendX: function () {
-      var maxOffset = $scope.abc.chartOffset.width - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+      var valueLength = $scope.abc.getTextLength('#abc-popup-row-text') + $scope.abc.getTextLength('#abc-popup-value-text') + 16;
+      var headerLength = $scope.abc.getTextLength('#abc-popup-column-text') + 8;
+      var largerLabel = Math.max(valueLength, headerLength);
+
+      var maxOffset = $scope.abc.chartOffset.width - 10 - largerLabel;
       var rightOffset = 0;
       if ($scope.settings.type === 'bar') {
         rightOffset = $scope.abc.hoveringBarOffset().x2 + 10;
         if (rightOffset > maxOffset) {
-          return $scope.abc.calculateBarX($scope.settings.hovering.y, $scope.settings.hovering.x) - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+          return $scope.abc.calculateBarX($scope.settings.hovering.y, $scope.settings.hovering.x) - 10 - largerLabel;
         }
         return rightOffset;
       }
       rightOffset = $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x + 10;
       if (rightOffset > maxOffset) {
-        return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 26 - $scope.abc.getTextLength('#abc-popup-column-text') - $scope.abc.getTextLength('#abc-popup-value-text');
+        return $scope.abc.calculatePoint($scope.settings.hovering.y, $scope.settings.hovering.x).x - 10 - largerLabel;
       }
       return rightOffset;
     },
