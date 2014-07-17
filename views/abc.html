@@ -22,7 +22,10 @@
       </g>
     </g>
     <!-- Main Chart Elements -->
-    <g id="abc-chart-element" ng-include="'bower_components/angular-abc/views/abc-' + settings.type + '.html'"></g>
+    <abc-line ng-show="settings.type === 'line'"></abc-line>
+    <abc-area ng-show="settings.type === 'area'"></abc-area>
+    <abc-spline ng-show="settings.type === 'spline'"></abc-spline>
+    <abc-bar ng-show="settings.type === 'bar'"></abc-bar>
     <!-- Axis -->
     <g id="abc-axis" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
       <!-- Y Axis -->

@@ -256,6 +256,9 @@ angular.module('angularAbc', [])
       x: 0,
       y: 0
     },
+    includeChartElement: function () {
+      return ('<abc-' + $scope.settings.type + '></abc-' + $scope.settings.type + '>').toString();
+    },
     setMouseOffset: function ($event) {
       $scope.abc.mouseOffset.x = $event.offsetX;
       $scope.abc.mouseOffset.y = $event.offsetY;
@@ -685,4 +688,33 @@ angular.module('angularAbc', [])
   updateChartOffset.height();
   updateYTicks();
 
+}])
+
+.directive('abcLine', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-line.html'
+  };
+}])
+.directive('abcArea', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-area.html'
+  };
+}])
+.directive('abcSpline', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-spline.html'
+  };
+}])
+.directive('abcBar', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'bower_components/angular-abc/views/abc-bar.html'
+  };
 }]);
