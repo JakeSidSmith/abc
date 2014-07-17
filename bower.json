@@ -4,6 +4,7 @@
   "version": "0.3.4",
   "license": "MIT",
   "homepage": "https://github.com/JakeSidSmith/abc",
+  "ignore": [],
   "keywords": [
     "abc",
     "angular",
