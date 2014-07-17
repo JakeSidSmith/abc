@@ -1,6 +1,8 @@
-# Angular Bound Charts v 0.3.4
+# Angular Bound Charts v 0.3.5
 
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
+
+__This release is compatible with all modern browsers [Chrome, Firefox, Safari, IE, Opera]__
 
 This is a reasonably new project (with only myself working on it currently), but I plan on keeping it updated, improving performance & will be adding tests & extensive documentation shortly.
 
