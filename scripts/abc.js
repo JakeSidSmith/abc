@@ -119,6 +119,7 @@ angular.module('angularAbc', [])
   $scope.input.transform.xLabels = $scope.input.transform.xLabels || returnValue;
   $scope.input.transform.popupLabels = $scope.input.transform.popupLabels || returnValue;
   $scope.input.transform.popupValues = $scope.input.transform.popupValues || returnValue;
+  $scope.input.transform.popupHeaders = $scope.input.transform.popupHeaders || returnValue;
   // Axis offset
   $scope.input.xAxisLabelOffset = $scope.input.xAxisLabelOffset || 0;
   // Axis culling
@@ -380,14 +381,23 @@ angular.module('angularAbc', [])
       }
       return rightOffset;
     },
-    popupLabel: function (indexP) {
+    popupRowLabel: function (index) {
       var value;
-      if (indexP < 0) {
+      if (index < 0) {
         return '';
       } else {
-        value = $scope.settings.headers.rows[$scope.settings.hovering.y].value;
+        value = $scope.settings.headers.rows[index].value;
       }
       return $scope.settings.transform.popupLabels(value);
+    },
+    popupColumnLabel: function (index) {
+      var value;
+      if (index < 0) {
+        return '';
+      } else {
+        value = $scope.settings.headers.columns[index].value;
+      }
+      return $scope.settings.transform.popupHeaders(value);
     },
     popupValue: function (indexP, index) {
       var value;
@@ -397,6 +407,14 @@ angular.module('angularAbc', [])
         value = $scope.settings.data[indexP][index].value;
       }
       return $scope.settings.transform.popupValues(value);
+    },
+    popupWidth: function () {
+      var valueLength = $scope.abc.getTextLength('#abc-popup-row-text') + $scope.abc.getTextLength('#abc-popup-value-text') + 16;
+      var headerLength = $scope.abc.getTextLength('#abc-popup-column-text') + 8;
+      return Math.max(valueLength, headerLength) || 0;
+    },
+    popupValueX: function () {
+      return $scope.abc.getTextLength('#abc-popup-row-text') + 8;
     },
     calculatePointYValue: function (value) {
       var multiplier = $scope.abc.chartOffset.height / $scope.abc.highLowDif();
