@@ -700,9 +700,6 @@ angular.module('angularAbc', [])
         return 1;
       }
       return index % $scope.abc.xAxisShowEveryOther === 0 ? 1 : 0;
-    },
-    yAxisLabelY: function (index) {
-      return 0 - $scope.settings.axisTickSize*1.5 - $scope.abc.yTickTextLength(index);
     }
   };
 
