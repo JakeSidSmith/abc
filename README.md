@@ -1,4 +1,4 @@
-# Angular Bound Charts v 0.4.1
+# Angular Bound Charts v 0.4.2
 
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
 
@@ -135,7 +135,8 @@ The version at the time of writing this is `0.3.0`.
                 color: 'red',
                 title: 'Region 1',
                 size: 12,
-                titleY: 'top' // 'top', 'center', 'bottom', or number e.g. 0.5 (half) or 0.75 (3 quarters)
+                titleY: 'top', // 'top', 'center', 'bottom', or number e.g. 0.5 (half) or 0.75 (3 quarters)
+                opacity: 0.2 // Set highlight opacity of region, defaults to 0.2
               }
             ],
 

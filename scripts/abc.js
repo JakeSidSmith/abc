@@ -644,6 +644,9 @@ angular.module('angularAbc', [])
         y: yPos
       };
     },
+    regionFillOpacity: function (region) {
+      return region.opacity !== undefined ? region.opacity : 0.2;
+    },
     getBandStart: function (band) {
       if (band.start === 'top') {
         return $scope.abc.highLow().highest;
