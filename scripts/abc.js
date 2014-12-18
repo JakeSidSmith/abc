@@ -198,6 +198,7 @@ angular.module('angularAbc', [])
       if ($scope.settings.xAxisLabelCulling) {
         xAxisLabelCullingUpdate();
       }
+      updateYTicks();
     }
   };
 
