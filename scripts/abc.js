@@ -193,6 +193,8 @@ angular.module('angularAbc', [])
     if (oldValue === undefined || newValue !== oldValue) {
       updateChartOffset.x();
       updateChartOffset.width();
+      updateChartOffset.y();
+      updateChartOffset.height();
       if ($scope.settings.xAxisLabelCulling) {
         xAxisLabelCullingUpdate();
       }
@@ -201,6 +203,8 @@ angular.module('angularAbc', [])
 
   var chartHeightUpdate = function (newValue, oldValue) {
     if (oldValue === undefined || newValue !== oldValue) {
+      updateChartOffset.x();
+      updateChartOffset.width();
       updateChartOffset.y();
       updateChartOffset.height();
       updateYTicks();
