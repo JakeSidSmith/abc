@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/JakeSidSmith/abc/issues"
   },
-  "homepage": "https://github.com/JakeSidSmith/abc#readme"
+  "homepage": "https://github.com/JakeSidSmith/abc#readme",
+  "dependencies": {
+    "angular": "~1.2.0"
+  }
 }
