@@ -2,7 +2,7 @@
   "name": "angular-abc",
   "version": "0.4.5",
   "description": "Angular Bound Charts - Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies",
-  "main": "scripts/abc.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

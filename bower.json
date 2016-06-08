@@ -17,7 +17,7 @@
     "responsive",
     "svg"
   ],
-  "main": "scripts/abc.js",
+  "main": "lib/abc.js",
   "dependencies": {
     "angular": "~1.2.0"
   }
