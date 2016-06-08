@@ -4,7 +4,7 @@
   "description": "Angular Bound Charts - Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib/"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,8 @@
   "homepage": "https://github.com/JakeSidSmith/abc#readme",
   "dependencies": {
     "angular": "~1.2.0"
+  },
+  "devDependencies": {
+    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1"
   }
 }
