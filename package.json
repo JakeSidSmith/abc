@@ -1,0 +1,37 @@
+{
+  "name": "angular-abc",
+  "version": "0.4.5",
+  "description": "Angular Bound Charts - Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeSidSmith/abc.git"
+  },
+  "keywords": [
+    "angular",
+    "charts",
+    "chart",
+    "charting",
+    "abc",
+    "bound"
+  ],
+  "author": "Jake 'Sid' Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JakeSidSmith/abc/issues"
+  },
+  "homepage": "https://github.com/JakeSidSmith/abc#readme",
+  "dependencies": {
+    "angular": "~1.2.0"
+  },
+  "devDependencies": {
+    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1"
+  },
+  "engines": {
+    "node": "6.2",
+    "npm": "3.8"
+  }
+}

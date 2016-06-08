@@ -1,5 +1,0 @@
-<svg>
-    <g id="abc-areas" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})">
-        <polyline ng-class="abc.hoveringClass($index)" ng-repeat="points in settings.data" ng-attr-stroke="{{settings.colors[$index % settings.colors.length]}}" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}" ng-attr-points="{{abc.getAreaPoints($index)}}" fill-opacity="0.3" ng-attr-stroke-width="{{settings.lineWidth}}"></polyline>
-    </g>
-</svg>

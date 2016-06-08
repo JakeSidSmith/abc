@@ -1,5 +1,0 @@
-<svg>
-    <g id="abc-bars" ng-class="abc.hoveringClass($index)" ng-attr-transform="translate({{abc.chartOffset.x}}, {{abc.chartOffset.y}})" ng-repeat="points in settings.data" ng-attr-fill="{{settings.colors[$index % settings.colors.length]}}">
-        <rect ng-repeat="point in points" ng-attr-x="{{abc.barOffset($parent.$index, $index).x}}" ng-attr-y="{{abc.barOffset($parent.$index, $index).y}}" ng-attr-width="{{abc.barOffset($parent.$index, $index).width}}" ng-attr-height="{{abc.barOffset($parent.$index, $index).height}}"></rect>
-    </g>
-</svg>

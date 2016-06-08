@@ -1,4 +1,4 @@
-# Angular Bound Charts v 0.4.4
+# Angular Bound Charts v 0.4.5
 
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
 

@@ -1,7 +1,7 @@
 {
   "name": "angular-abc",
   "description": "Angular Bound Charts - Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "license": "MIT",
   "homepage": "https://github.com/JakeSidSmith/abc",
   "ignore": [],
@@ -17,7 +17,7 @@
     "responsive",
     "svg"
   ],
-  "main": "scripts/abc.js",
+  "main": "lib/index.js",
   "dependencies": {
     "angular": "~1.2.0"
   }
