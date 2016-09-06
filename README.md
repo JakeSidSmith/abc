@@ -1,5 +1,7 @@
 # Angular Bound Charts v 0.4.5
 
+# This library is no longer maintained
+
 __Customisable SVG charts with live data & settings, completely bound to AngularJS with no other dependencies__
 
 __This release is compatible with all modern browsers [Chrome, Firefox, Safari, IE, Opera]__
