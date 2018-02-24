@@ -1,4 +1,4 @@
-# Angular Bound Charts v 0.4.5
+# Angular Bound Charts v 0.4.6
 
 # DEPRECATED: This library is no longer maintained
 

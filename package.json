@@ -1,6 +1,6 @@
 {
   "name": "angular-abc",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "DEPRECATED: This library is no longer maintained",
   "main": "lib/index.js",
   "scripts": {
